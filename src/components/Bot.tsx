@@ -806,11 +806,11 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
           </div>
         )}
 
-          <Show when={apiData()}>
-            <div class="api-data-container">
-              <pre>{JSON.stringify(apiData(), null, 2)}</pre> 
-            </div>
-          </Show>
+        <Show when={apiData()}>
+          <div class="api-data-container">
+            <pre>{JSON.stringify(apiData(), null, 2)}</pre>
+          </div>
+        </Show>
 
         {props.showTitle ? (
           <div
@@ -1022,13 +1022,6 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
   );
 };
 
-function setState(arg0: { apiData: ApiResponse[] }) {
-  throw new Error('Function not implemented.');
-}
-
-  function useEffect(effect: () => void, deps: never[]) {
-    // Your implementation here
-  }
 // type BottomSpacerProps = {
 //   ref: HTMLDivElement | undefined;
 // };
