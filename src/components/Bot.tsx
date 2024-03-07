@@ -419,7 +419,7 @@ export const Bot = async (botProps: BotProps & { class?: string }) => {
       return;
     }
     try {
-      const apiData = await fetchData('your-api-endpoint');
+      const apiData = await fetchData('https://pokeapi.co/api/v2/pokemon/ditto');
       setState({ apiData });
     } catch (error) {
       console.error('Error fetching data:', error);
