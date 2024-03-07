@@ -792,7 +792,7 @@ export const Bot = async (botProps: BotProps & { class?: string }) => {
           </div>
         )}
 
-        {(
+        {
           // Check for data availability before rendering
           <div class="api-cards">
             <For each={await apiData}>
@@ -804,8 +804,7 @@ export const Bot = async (botProps: BotProps & { class?: string }) => {
               )}
             </For>
           </div>
-
-        )}
+        }
 
         {props.showTitle ? (
           <div
