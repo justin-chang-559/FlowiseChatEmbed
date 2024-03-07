@@ -77,6 +77,26 @@ export type BotProps = {
   observersConfig?: observersConfigType;
 };
 
+interface ApiResponse {
+  id: number;
+  title: string;
+  description: string;
+  // Add more properties as needed for your specific API response
+}
+const fetchData = async (url: string): Promise<ApiResponse[]> => {
+  try {
+    const response = await fetch(url + '?', {
+      method: 'GET', // Adjust method as needed (POST, PUT, etc.)
+    });
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error('Error fetching data:', error);
+    // Handle errors appropriately, e.g., display an error message
+    return []; // Return empty array to prevent rendering issues
+  }
+};
+
 const defaultWelcomeMessage = 'Hi there! How can I help?';
 
 /*const sourceDocuments = [
@@ -159,8 +179,11 @@ const defaultWelcomeMessage = 'Hi there! How can I help?';
 const defaultBackgroundColor = '#ffffff';
 const defaultTextColor = '#303235';
 
-export const Bot = (botProps: BotProps & { class?: string }) => {
+
+export const Bot = async (botProps: BotProps & { class?: string }) => {
   // set a default value for showTitle if not set and merge with other props
+  const apiData = fetchData('https://pokeapi.co/api/v2/pokemon/ditto');
+
   const props = mergeProps({ showTitle: true }, botProps);
   let chatContainer: HTMLDivElement | undefined;
   let bottomSpacer: HTMLDivElement | undefined;
@@ -295,6 +318,7 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
         return;
       }
     }
+    
 
     setLoading(true);
     scrollToBottom();
@@ -395,6 +419,13 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
       const errorData = typeof err === 'string' ? err : err.response.data || `${err.response.status}: ${err.response.statusText}`;
       handleError(errorData);
       return;
+    }
+    try {
+      const apiData = await fetchData('your-api-endpoint');
+      setState({ apiData });
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      // Handle errors appropriately, e.g., display an error message
     }
   };
 
@@ -762,6 +793,23 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
             </For>
           </div>
         )}
+        
+        {( // Check for data availability before rendering
+          <div class="api-cards">
+            <For each={await apiData}>
+              {(item) => (
+                <div class="api-card">
+                  <h2>{item.title}</h2>
+                  <p>{item.description}</p>
+                </div>
+              )}
+            </For>
+          </div>
+        )}
+
+
+
+    
 
         {props.showTitle ? (
           <div
@@ -973,6 +1021,10 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
   );
 };
 
+
+function setState(arg0: { apiData: ApiResponse[]; }) {
+  throw new Error('Function not implemented.');
+}
 // type BottomSpacerProps = {
 //   ref: HTMLDivElement | undefined;
 // };
