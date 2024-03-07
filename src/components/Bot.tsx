@@ -16,7 +16,6 @@ import { DeleteButton, SendButton } from '@/components/buttons/SendButton';
 import { CircleDotIcon, TrashIcon } from './icons';
 import { CancelButton } from './buttons/CancelButton';
 import { cancelAudioRecording, startAudioRecording, stopAudioRecording } from '@/utils/audioRecording';
-
 export type FileEvent<T = EventTarget> = {
   target: T;
 };
@@ -84,17 +83,17 @@ interface ApiResponse {
   description: string;
   // Add more properties as needed for your specific API response
 }
-const fetchData = async (url: string): Promise<ApiResponse[]> => {
+const fetchData = async (url: string) => {
   try {
-    const response = await fetch(url + '?', {
-      method: 'GET', // Adjust method as needed (POST, PUT, etc.)
-    });
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
     const data = await response.json();
     return data;
   } catch (error) {
     console.error('Error fetching data:', error);
-    // Handle errors appropriately, e.g., display an error message
-    return []; // Return empty array to prevent rendering issues
+    throw error;
   }
 };
 
@@ -180,10 +179,22 @@ const defaultWelcomeMessage = 'Need career assistance? Ask me anything!';
 const defaultBackgroundColor = '#0F2D52';
 const defaultTextColor = '#303235';
 
-export const Bot = async (botProps: BotProps & { class?: string }) => {
+export const Bot = (botProps: BotProps & { class?: string }) => {
   // set a default value for showTitle if not set and merge with other props
-  const apiData = fetchData('https://pokeapi.co/api/v2/pokemon/ditto');
-
+  const [apiData, setApiData] = createSignal(null as ApiResponse[] | null);
+  createEffect(async () => {
+    try {
+      const response = await fetch('https://pokeapi.co/api/v2/pokemon/ditto');
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      const data = await response.json();
+      setApiData(data);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      // Handle errors appropriately, e.g., display an error message
+    }
+  });
   const props = mergeProps({ showTitle: true }, botProps);
   let chatContainer: HTMLDivElement | undefined;
   let bottomSpacer: HTMLDivElement | undefined;
@@ -795,19 +806,11 @@ export const Bot = async (botProps: BotProps & { class?: string }) => {
           </div>
         )}
 
-        {
-          // Check for data availability before rendering
-          <div class="api-cards">
-            <For each={await apiData}>
-              {(item) => (
-                <div class="api-card">
-                  <h2>{item.form.name}</h2>
-                  <p>{item.form.url}</p>
-                </div>
-              )}
-            </For>
-          </div>
-        }
+          <Show when={apiData()}>
+            <div class="api-data-container">
+              <pre>{JSON.stringify(apiData(), null, 2)}</pre> 
+            </div>
+          </Show>
 
         {props.showTitle ? (
           <div
@@ -1011,7 +1014,7 @@ export const Bot = async (botProps: BotProps & { class?: string }) => {
               />
             )}
           </div>
-          <Badge badgeBackgroundColor={props.badgeBackgroundColor} poweredByTextColor={props.poweredByTextColor} botContainer={botContainer} />
+          {/* <Badge badgeBackgroundColor={props.badgeBackgroundColor} poweredByTextColor={props.poweredByTextColor} botContainer={botContainer} /> */}
         </div>
       </div>
       {sourcePopupOpen() && <Popup isOpen={sourcePopupOpen()} value={sourcePopupSrc()} onClose={() => setSourcePopupOpen(false)} />}
@@ -1022,6 +1025,10 @@ export const Bot = async (botProps: BotProps & { class?: string }) => {
 function setState(arg0: { apiData: ApiResponse[] }) {
   throw new Error('Function not implemented.');
 }
+
+  function useEffect(effect: () => void, deps: never[]) {
+    // Your implementation here
+  }
 // type BottomSpacerProps = {
 //   ref: HTMLDivElement | undefined;
 // };
