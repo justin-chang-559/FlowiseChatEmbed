@@ -179,7 +179,6 @@ const defaultWelcomeMessage = 'Hi there! How can I help?';
 const defaultBackgroundColor = '#ffffff';
 const defaultTextColor = '#303235';
 
-
 export const Bot = async (botProps: BotProps & { class?: string }) => {
   // set a default value for showTitle if not set and merge with other props
   const apiData = fetchData('https://pokeapi.co/api/v2/pokemon/ditto');
@@ -318,7 +317,6 @@ export const Bot = async (botProps: BotProps & { class?: string }) => {
         return;
       }
     }
-    
 
     setLoading(true);
     scrollToBottom();
@@ -793,8 +791,9 @@ export const Bot = async (botProps: BotProps & { class?: string }) => {
             </For>
           </div>
         )}
-        
-        {( // Check for data availability before rendering
+
+        {
+          // Check for data availability before rendering
           <div class="api-cards">
             <For each={await apiData}>
               {(item) => (
@@ -805,11 +804,7 @@ export const Bot = async (botProps: BotProps & { class?: string }) => {
               )}
             </For>
           </div>
-        )}
-
-
-
-    
+        }
 
         {props.showTitle ? (
           <div
@@ -1021,8 +1016,7 @@ export const Bot = async (botProps: BotProps & { class?: string }) => {
   );
 };
 
-
-function setState(arg0: { apiData: ApiResponse[]; }) {
+function setState(arg0: { apiData: ApiResponse[] }) {
   throw new Error('Function not implemented.');
 }
 // type BottomSpacerProps = {
