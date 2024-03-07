@@ -78,6 +78,7 @@ export type BotProps = {
 };
 
 interface ApiResponse {
+  form: any;
   name: string;
   url: string;
   description: string;
@@ -798,8 +799,8 @@ export const Bot = async (botProps: BotProps & { class?: string }) => {
             <For each={await apiData}>
               {(item) => (
                 <div class="api-card">
-                  <h2>{item.name}</h2>
-                  <p>{item.url}</p>
+                  <h2>{item.form.name}</h2>
+                  <p>{item.form.url}</p>
                 </div>
               )}
             </For>
