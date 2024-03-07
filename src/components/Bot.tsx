@@ -78,8 +78,8 @@ export type BotProps = {
 };
 
 interface ApiResponse {
-  id: number;
-  title: string;
+  name: string;
+  url: string;
   description: string;
   // Add more properties as needed for your specific API response
 }
@@ -792,19 +792,20 @@ export const Bot = async (botProps: BotProps & { class?: string }) => {
           </div>
         )}
 
-        {
+        {(
           // Check for data availability before rendering
           <div class="api-cards">
             <For each={await apiData}>
               {(item) => (
                 <div class="api-card">
-                  <h2>{item.title}</h2>
-                  <p>{item.description}</p>
+                  <h2>{item.name}</h2>
+                  <p>{item.url}</p>
                 </div>
               )}
             </For>
           </div>
-        }
+
+        )}
 
         {props.showTitle ? (
           <div
