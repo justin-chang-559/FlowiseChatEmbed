@@ -177,7 +177,7 @@ const defaultWelcomeMessage = 'Need career assistance? Ask me anything!';
     },
 ]*/
 
-const defaultBackgroundColor = '#ffffff';
+const defaultBackgroundColor = '#0F2D52';
 const defaultTextColor = '#303235';
 
 export const Bot = async (botProps: BotProps & { class?: string }) => {
