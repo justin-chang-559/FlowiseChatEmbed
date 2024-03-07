@@ -98,7 +98,7 @@ const fetchData = async (url: string): Promise<ApiResponse[]> => {
   }
 };
 
-const defaultWelcomeMessage = 'Hi there! How can I help?';
+const defaultWelcomeMessage = 'Need career assistance? Ask me anything!';
 
 /*const sourceDocuments = [
     {
