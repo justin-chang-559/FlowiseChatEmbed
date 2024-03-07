@@ -196,7 +196,8 @@ export const Bot = async (botProps: BotProps & { class?: string }) => {
   const [messages, setMessages] = createSignal<MessageType[]>(
     [
       {
-        message: props.welcomeMessage ?? defaultWelcomeMessage,
+        message: "Hi i am justin",
+        // message: props.welcomeMessage ?? defaultWelcomeMessage,
         type: 'apiMessage',
       },
     ],
@@ -522,7 +523,8 @@ export const Bot = async (botProps: BotProps & { class?: string }) => {
       setLoading(false);
       setMessages([
         {
-          message: props.welcomeMessage ?? defaultWelcomeMessage,
+          message: "I'm sorry, I'm having trouble connecting to the server. Please try again later.",
+          // message: props.welcomeMessage ?? defaultWelcomeMessage,
           type: 'apiMessage',
         },
       ]);
