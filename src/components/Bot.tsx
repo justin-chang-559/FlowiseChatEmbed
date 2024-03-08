@@ -16,6 +16,7 @@ import { DeleteButton, SendButton } from '@/components/buttons/SendButton';
 import { CircleDotIcon, TrashIcon } from './icons';
 import { CancelButton } from './buttons/CancelButton';
 import { cancelAudioRecording, startAudioRecording, stopAudioRecording } from '@/utils/audioRecording';
+import { useState, useEffect } from 'react';
 export type FileEvent<T = EventTarget> = {
   target: T;
 };
@@ -76,26 +77,43 @@ export type BotProps = {
   observersConfig?: observersConfigType;
 };
 
-interface ApiResponse {
-  form: any;
+interface JobListing {
   name: string;
-  url: string;
-  description: string;
-  // Add more properties as needed for your specific API response
+  company: string;
+  wage: string;
+  job_type: string;
+  details: string;
+  explanation: string;
 }
-const fetchData = async (url: string) => {
+
+interface ApiResponse {  // Array of JobListings
+  data: JobListing[]; 
+}
+
+
+async function query(searchQuery: string): Promise<ApiResponse | null> { 
+  const endpoint = `http://localhost:3000/api/v1/prediction/806cae74-1096-434b-a003-8a5779b42c4a`; 
+
   try {
-    const response = await fetch(url);
+    const response = await fetch(endpoint, {
+      method: "POST", 
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ question: searchQuery }) 
+    });
+
     if (!response.ok) {
       throw new Error('Network response was not ok');
     }
-    const data = await response.json();
-    return data;
+
+    const result: ApiResponse = await response.json(); 
+    return result;
   } catch (error) {
     console.error('Error fetching data:', error);
-    throw error;
+    return null; 
   }
-};
+}
 
 const defaultWelcomeMessage = 'Need career assistance? Ask me anything!';
 
@@ -181,20 +199,24 @@ const defaultTextColor = '#303235';
 
 export const Bot = (botProps: BotProps & { class?: string }) => {
   // set a default value for showTitle if not set and merge with other props
-  const [apiData, setApiData] = createSignal(null as ApiResponse[] | null);
-  createEffect(async () => {
-    try {
-      const response = await fetch('https://pokeapi.co/api/v2/pokemon/ditto');
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-      const data = await response.json();
-      setApiData(data);
-    } catch (error) {
-      console.error('Error fetching data:', error);
-      // Handle errors appropriately, e.g., display an error message
-    }
-  });
+  function JobSearch() {
+    const [apiData, setApiData] = useState<ApiResponse | null>(null);
+    const [searchQuery, setSearchQuery] = useState('doctor'); // Initial search
+  
+    const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+      setSearchQuery(event.target.value);
+    };
+  
+    useEffect(() => {
+      const fetchData = async () => {
+        const response = await query(searchQuery);
+        setApiData(response);
+      };
+  
+      fetchData();
+    }, [searchQuery]);
+
+
   const props = mergeProps({ showTitle: true }, botProps);
   let chatContainer: HTMLDivElement | undefined;
   let bottomSpacer: HTMLDivElement | undefined;
@@ -430,13 +452,6 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
       const errorData = typeof err === 'string' ? err : err.response.data || `${err.response.status}: ${err.response.statusText}`;
       handleError(errorData);
       return;
-    }
-    try {
-      const apiData = await fetchData('https://pokeapi.co/api/v2/pokemon/ditto');
-      setState({ apiData });
-    } catch (error) {
-      console.error('Error fetching data:', error);
-      // Handle errors appropriately, e.g., display an error message
     }
   };
 
@@ -806,11 +821,25 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
           </div>
         )}
 
-        <Show when={apiData()}>
-          <div class="api-data-container">
-            <pre>{JSON.stringify(apiData(), null, 2)}</pre>
+          <div>
+            {apiData ? (
+              <Show when={apiData.data.length > 0}> {/* Adapt condition as needed */}
+                <ul>
+                  <For each={apiData.data}> 
+                    {(job, index) => ( 
+                      <li key={index}> {/* Or key={job.id} if you have unique IDs */}
+                        <h3>{job.name} - {job.company}</h3>
+                        <p><strong>Details:</strong> {job.details}</p>
+                        <p><strong>Explanation:</strong> {job.explanation}</p>
+                      </li>
+                    )}
+                  </For>
+                </ul>
+              </Show>
+            ) : (
+              <p>Loading job listings...</p>
+            )}
           </div>
-        </Show>
 
         {props.showTitle ? (
           <div
@@ -1020,6 +1049,7 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
       {sourcePopupOpen() && <Popup isOpen={sourcePopupOpen()} value={sourcePopupSrc()} onClose={() => setSourcePopupOpen(false)} />}
     </>
   );
+};
 };
 
 // type BottomSpacerProps = {
