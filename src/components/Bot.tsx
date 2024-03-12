@@ -201,12 +201,8 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
   // set a default value for showTitle if not set and merge with other props
 
   const [apiData, setApiData] = useState<ApiResponse | null>(null);
-  const [searchQuery, setSearchQuery] = useState('software engineer'); // Initial search
+  const [searchQuery, setSearchQuery] = useState('software engineer'); 
 
-  // const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-  //   setSearchQuery(event.target.value);
-  // };
-  setSearchQuery('software engineer');
   useEffect(() => {
     const fetchData = async () => {
       const response = await query(searchQuery);
@@ -214,7 +210,7 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
     };
 
     fetchData();
-  }, [searchQuery]);
+  }, []); // Empty dependency array
 
   const props = mergeProps({ showTitle: true }, botProps);
   let chatContainer: HTMLDivElement | undefined;
