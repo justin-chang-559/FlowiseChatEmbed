@@ -87,32 +87,24 @@ interface JobListing {
 }
 
 interface ApiResponse {
-  // Array of JobListings
-  data: JobListing[];
+  text: string; // The full response text
+  chatMessageId: string;
+  chatId: string;
+  jobs?: JobListing[]; // Optional jobs array
 }
 
-async function query(searchQuery: string): Promise<ApiResponse | null> {
-  const endpoint = `http://localhost:3000/api/v1/prediction/806cae74-1096-434b-a003-8a5779b42c4a`;
+async function query(searchQuery: string): Promise<ApiResponse> {
+  const response = await fetch('http://localhost:3000/api/v1/prediction/806cae74-1096-434b-a003-8a5779b42c4a', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ question: searchQuery }),
+  });
 
-  try {
-    const response = await fetch(endpoint, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ question: searchQuery }),
-    });
-
-    if (!response.ok) {
-      throw new Error('Network response was not ok');
-    }
-
-    const result: ApiResponse = await response.json();
-    return result;
-  } catch (error) {
-    console.error('Error fetching data:', error);
-    return null;
-  }
+  const result: ApiResponse = await response.json(); // Type the result
+  console.log('result inside query:', result);
+  return result;
 }
 
 const defaultWelcomeMessage = 'Need career assistance? Ask me anything!';
@@ -200,17 +192,17 @@ const defaultTextColor = '#303235';
 export const Bot = (botProps: BotProps & { class?: string }) => {
   // set a default value for showTitle if not set and merge with other props
 
-  const [apiData, setApiData] = useState<ApiResponse | null>(null);
-  const [searchQuery, setSearchQuery] = useState('software engineer'); 
-
+  const [apiData, setApiData] = useState<ApiResponse>(); // Update the type of apiData
+  const [searchQuery, setSearchQuery] = useState('car');
   useEffect(() => {
     const fetchData = async () => {
       const response = await query(searchQuery);
       setApiData(response);
     };
 
-    fetchData();
-  }, []); // Empty dependency array
+    fetchData(); // Call fetchData immediately
+    console.log('apiData:', apiData);
+  }, [searchQuery]);
 
   const props = mergeProps({ showTitle: true }, botProps);
   let chatContainer: HTMLDivElement | undefined;
@@ -815,35 +807,7 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
           </div>
         )}
 
-        <div>
-          {apiData ? (
-            <Show when={apiData.data.length > 0}>
-              {' '}
-              {/* Adapt condition as needed */}
-              <ul>
-                <For each={apiData.data}>
-                  {(job, index) => (
-                    <li>
-                      {' '}
-                      {/* Or key={job.id} if you have unique IDs */}
-                      <h3>
-                        {job.name} - {job.company}
-                      </h3>
-                      <p>
-                        <strong>Details:</strong> {job.details}
-                      </p>
-                      <p>
-                        <strong>Explanation:</strong> {job.explanation}
-                      </p>
-                    </li>
-                  )}
-                </For>
-              </ul>
-            </Show>
-          ) : (
-            <p>Loading job listings...</p>
-          )}
-        </div>
+        <div>{<pre>{JSON.stringify(apiData, null, 2)}</pre>}</div>
 
         {props.showTitle ? (
           <div
