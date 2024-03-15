@@ -114,17 +114,17 @@ const defaultWelcomeMessage = 'Need career assistance? Ask me anything!';
 const defaultBackgroundColor = '#0F2D52';
 const defaultTextColor = '#303235';
 
-const [apiData, setApiData] = useState<ApiResponse>(); // Update the type of apiData
-  const [searchQuery, setSearchQuery] = useState('car');
-  useEffect(() => {
-    const fetchData = async () => {
-      const response = await query(searchQuery);
-      setApiData(response);
-    };
+// const [apiData, setApiData] = useState<ApiResponse>(); // Update the type of apiData
+// const [searchQuery, setSearchQuery] = useState('car');
+// useEffect(() => {
+//   const fetchData = async () => {
+//     const response = await query(searchQuery);
+//     setApiData(response);
+//   };
 
-    fetchData(); // Call fetchData immediately
-    console.log('apiData:', apiData);
-  }, [searchQuery]);
+//   fetchData(); // Call fetchData immediately
+//   console.log('apiData:', apiData);
+// }, [searchQuery]);
 
 export const Bot = (botProps: BotProps & { class?: string }) => {
   // set a default value for showTitle if not set and merge with other props
