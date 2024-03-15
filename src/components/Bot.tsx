@@ -113,37 +113,39 @@ async function query(data: { question: string }): Promise<ApiResponse> {
 }
 
 export const Bot = (botProps: BotProps & { class?: string }) => {
-  const [apiResponse, setApiResponse] = useState<ApiResponse | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  // const [apiResponse, setApiResponse] = useState<ApiResponse | null>(null);
+  // const [isLoading, setIsLoading] = useState(false);
+  // const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      setIsLoading(true);
-      setError(null);
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     setIsLoading(true);
+  //     setError(null);
 
-      try {
-        const response = await query({ question: 'software Engineer' });
-        const result: ApiResponse = await response;
+  //     try {
+  //       const response = await query({ question: 'software Engineer' });
+  //       const result: ApiResponse = await response;
 
-        // Parse 'text' property and update state
-        if (result.text) {
-          const jobListings: JobListing[] = JSON.parse(result.text);
-          setApiResponse({ ...result, jobs: jobListings });
-          console.log('result:', result);
-        } else {
-          setApiResponse(result);
-        }
-      } catch (error) {
-        setError('Error fetching data');
-        console.error('Error:', error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
+  //       // Parse 'text' property and update state
+  //       if (result.text) {
+  //         const jobListings: JobListing[] = JSON.parse(result.text);
+  //         setApiResponse({ ...result, jobs: jobListings });
+  //         console.log('result:', result);
+  //       } else {
+  //         setApiResponse(result);
+  //       }
+  //     } catch (error) {
+  //       setError('Error fetching data');
+  //       console.error('Error:', error);
+  //     } finally {
+  //       setIsLoading(false);
+  //     }
+  //   };
 
-    fetchData(); // Execute the fetch function
-  }, []);
+  //   fetchData(); // Execute the fetch function
+  // }, []);
+
+  const data = query({ question: 'software Engineer' });
 
   const props = mergeProps({ showTitle: true }, botProps);
   let chatContainer: HTMLDivElement | undefined;
@@ -748,10 +750,8 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
           </div>
         )}
 
-        
         {/* Display Stringified API Response */}
-        <div>{<pre>{JSON.stringify(apiResponse, null, 2)}</pre>}</div>
-        
+        <div>{<pre>{JSON.stringify(data, null, 2)}</pre>}</div>
 
         {props.showTitle ? (
           <div
