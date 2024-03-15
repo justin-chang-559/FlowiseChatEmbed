@@ -751,7 +751,14 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
         )}
 
         {/* Display Stringified API Response */}
-        <div>{<pre>{JSON.stringify(data, null, 2)}</pre>}</div>
+        <div 
+        class = "api call"
+        style={{
+          color: 'black',
+        }}
+        >
+          {<pre>{JSON.stringify(data)}</pre>}
+        </div>
 
         {props.showTitle ? (
           <div
