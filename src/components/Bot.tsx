@@ -95,19 +95,21 @@ interface ApiResponse {
   jobs?: JobListing[]; // Optional jobs array
 }
 
-// async function query(searchQuery: string): Promise<ApiResponse> {
-//   const response = await fetch('http://localhost:3000/api/v1/prediction/806cae74-1096-434b-a003-8a5779b42c4a', {
-//     method: 'POST',
-//     headers: {
-//       'Content-Type': 'application/json',
-//     },
-//     body: JSON.stringify({ question: searchQuery }),
-//   });
+async function query(data: { question: string }): Promise<ApiResponse> {
+  const response = await fetch(
+    "http://localhost:3000/api/v1/prediction/806cae74-1096-434b-a003-8a5779b42c4a",
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    }
+  );
 
-//   const result: ApiResponse = await response.json(); // Type the result
-//   console.log('result inside query:', result);
-//   return result;
-// }
+  const result: ApiResponse = await response.json(); // Enforce ApiResponse type
+  return result;
+}
 
 const defaultWelcomeMessage = 'Need career assistance? Ask me anything!';
 
@@ -127,8 +129,12 @@ const defaultTextColor = '#303235';
 // }, [searchQuery]);
 
 export const Bot = (botProps: BotProps & { class?: string }) => {
-  // set a default value for showTitle if not set and merge with other props
-  // import { io as lookup } from 'socket.io-client';
+  const question = "software Engineer"; // Your search query
+
+  query({ question }).then((response) => {
+    console.log(response);
+    const apiResponse: ApiResponse = response; // Store in a variable 
+  });
 
   const props = mergeProps({ showTitle: true }, botProps);
   let chatContainer: HTMLDivElement | undefined;
