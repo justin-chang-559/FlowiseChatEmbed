@@ -146,8 +146,8 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
   //   fetchData(); // Execute the fetch function
   // }, []);
 
-  const data = query({ question: 'software Engineer' });
-  console.log('data:', data);
+  const apiData = query({ question: 'software Engineer' });
+  console.log('data:', apiData);
 
   const props = mergeProps({ showTitle: true }, botProps);
   let chatContainer: HTMLDivElement | undefined;
@@ -388,7 +388,7 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
     try {
       const apiData = await query({ question: 'software Engineer' });
       setState({ apiData: [apiData] });
-
+      console.log('apiData:', apiData);
     } catch (error) {
       console.error('Error fetching data:', error);
       // Handle errors appropriately, e.g., display an error message
@@ -767,7 +767,7 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
             color: 'black',
           }}
         >
-          {<pre>{JSON.stringify(data)}</pre>}
+          {<pre>{JSON.stringify(apiData)}</pre>}
         </div>
 
         {props.showTitle ? (
@@ -980,7 +980,7 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
   );
 };
 
-function setState(arg0: {apiData: ApiResponse[] }) {
+function setState(arg0: { apiData: ApiResponse[] }) {
   throw new Error('Function not implemented.');
 }
 // type BottomSpacerProps = {
