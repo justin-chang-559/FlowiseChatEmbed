@@ -767,7 +767,7 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
             color: 'black',
           }}
         >
-          {<pre>{JSON.stringify(apiData)}</pre>}
+          <pre>{JSON.stringify(apiData, null, 2)}</pre>
         </div>
 
         {props.showTitle ? (
