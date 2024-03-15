@@ -83,7 +83,7 @@ interface JobListing {
   name: string;
   company: string;
   wage: string;
-  job_type: string; // Consider adding this if relevant 
+  job_type: string; // Consider adding this if relevant
   details: string;
   explanation: string;
 }
@@ -94,8 +94,6 @@ interface ApiResponse {
   chatId: string;
   jobs: JobListing[] | null; // Updated property
 }
-
-
 
 const defaultWelcomeMessage = 'Need career assistance? Ask me anything!';
 
@@ -116,52 +114,48 @@ const defaultTextColor = '#303235';
 
 export const Bot = (botProps: BotProps & { class?: string }) => {
   const [apiResponse, setApiResponse] = useState<ApiResponse | null>(null);
-    const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-    async function query(data: { question: string }): Promise<ApiResponse> {
-        const response = await fetch('http://localhost:3000/api/v1/prediction/806cae74-1096-434b-a003-8a5779b42c4a', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(data),
-        });
-        const result: ApiResponse = await response.json() as ApiResponse; // Enforce ApiResponse type
-        console.log("Stuff" , result);
-        return result;
-    
-    }
-    useEffect(() => {
-      const fetchData = async () => {
-          setIsLoading(true); 
-          setError(null); 
-  
-          try {
-              const response = await query({ question: 'software Engineer' });
-              const result: ApiResponse = await response
-  
-              // Parse 'text' property and update state 
-              if (result.text) { 
-                  const jobListings: JobListing[] = JSON.parse(result.text); 
-                  setApiResponse({ ...result, jobs: jobListings });  
-                  console.log('result:', result);
-              } else {
-                  setApiResponse(result);
-              }
-  
-          } catch (error) {
-              setError('Error fetching data'); 
-              console.error('Error:', error);
-          } finally {
-              setIsLoading(false); 
-          }
-      };
-  
-      fetchData(); // Execute the fetch function
-  }, []); 
+  async function query(data: { question: string }): Promise<ApiResponse> {
+    const response = await fetch('http://localhost:3000/api/v1/prediction/806cae74-1096-434b-a003-8a5779b42c4a', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    });
+    const result: ApiResponse = (await response.json()) as ApiResponse; // Enforce ApiResponse type
+    console.log('Stuff', result);
+    return result;
+  }
+  useEffect(() => {
+    const fetchData = async () => {
+      setIsLoading(true);
+      setError(null);
 
-  
+      try {
+        const response = await query({ question: 'software Engineer' });
+        const result: ApiResponse = await response;
+
+        // Parse 'text' property and update state
+        if (result.text) {
+          const jobListings: JobListing[] = JSON.parse(result.text);
+          setApiResponse({ ...result, jobs: jobListings });
+          console.log('result:', result);
+        } else {
+          setApiResponse(result);
+        }
+      } catch (error) {
+        setError('Error fetching data');
+        console.error('Error:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchData(); // Execute the fetch function
+  }, []);
 
   const props = mergeProps({ showTitle: true }, botProps);
   let chatContainer: HTMLDivElement | undefined;
@@ -766,26 +760,28 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
           </div>
         )}
 
-    <div>
-        {isLoading && <div>Loading...</div>}
-        {error && <div>Error: {error}</div>}
+        <div>
+          {isLoading && <div>Loading...</div>}
+          {error && <div>Error: {error}</div>}
 
-        {/* Conditional Rendering with <Show> */}
-        <Show when={apiResponse && apiResponse.jobs}> 
-          <div class="card-container">  
-            {/* Since .map isn't ideal here, render the cards with <Show> */}
-            <For each={apiResponse?.jobs}>{(job) => ( 
-              <div class="job-card-wrapper">
-                <div class="job-card"> 
-                  <h2>{job.name}</h2>
-                  <p>Company: {job.company}</p>
-                  <p>Wage: {job.wage}</p>
-                </div>
-              </div>
-            )}</For>
-          </div>
-        </Show>
-    </div>
+          {/* Conditional Rendering with <Show> */}
+          <Show when={apiResponse && apiResponse.jobs}>
+            <div class="card-container">
+              {/* Since .map isn't ideal here, render the cards with <Show> */}
+              <For each={apiResponse?.jobs}>
+                {(job) => (
+                  <div class="job-card-wrapper">
+                    <div class="job-card">
+                      <h2>{job.name}</h2>
+                      <p>Company: {job.company}</p>
+                      <p>Wage: {job.wage}</p>
+                    </div>
+                  </div>
+                )}
+              </For>
+            </div>
+          </Show>
+        </div>
 
         {props.showTitle ? (
           <div
