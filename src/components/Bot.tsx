@@ -10,6 +10,7 @@ import { StarterPromptBubble } from './bubbles/StarterPromptBubble';
 import { BotMessageTheme, TextInputTheme, UserMessageTheme } from '@/features/bubble/types';
 import { Badge } from './Badge';
 import socketIOClient from 'socket.io-client';
+
 import { Popup } from '@/features/popup';
 import { Avatar } from '@/components/avatars/Avatar';
 import { DeleteButton, SendButton } from '@/components/buttons/SendButton';
@@ -191,7 +192,7 @@ const defaultTextColor = '#303235';
 
 export const Bot = (botProps: BotProps & { class?: string }) => {
   // set a default value for showTitle if not set and merge with other props
-
+  // import { io as lookup } from 'socket.io-client';
   const [apiData, setApiData] = useState<ApiResponse>(); // Update the type of apiData
   const [searchQuery, setSearchQuery] = useState('car');
   useEffect(() => {
