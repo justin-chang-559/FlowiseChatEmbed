@@ -146,7 +146,7 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
   // }, []);
 
   const data = query({ question: 'software Engineer' });
-
+  console.log('data:', data);
   const props = mergeProps({ showTitle: true }, botProps);
   let chatContainer: HTMLDivElement | undefined;
   let bottomSpacer: HTMLDivElement | undefined;
@@ -751,11 +751,11 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
         )}
 
         {/* Display Stringified API Response */}
-        <div 
-        class = "api call"
-        style={{
-          color: 'black',
-        }}
+        <div
+          class="api call"
+          style={{
+            color: 'black',
+          }}
         >
           {<pre>{JSON.stringify(data)}</pre>}
         </div>
