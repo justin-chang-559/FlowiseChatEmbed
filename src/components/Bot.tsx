@@ -59,7 +59,6 @@ type observerConfigType = (accessor: string | boolean | object | MessageType[]) 
 export type observersConfigType = Record<'observeUserInput' | 'observeLoading' | 'observeMessages', observerConfigType>;
 
 export type BotProps = {
-  // apicall: ApiResponse;
   chatflowid: string;
   apiHost?: string;
   chatflowConfig?: Record<string, unknown>;
@@ -100,35 +99,26 @@ const defaultWelcomeMessage = 'Need career assistance? Ask me anything!';
 const defaultBackgroundColor = '#0F2D52';
 const defaultTextColor = '#303235';
 
-// const [apiData, setApiData] = useState<ApiResponse>(); // Update the type of apiData
-// const [searchQuery, setSearchQuery] = useState('car');
-// useEffect(() => {
-//   const fetchData = async () => {
-//     const response = await query(searchQuery);
-//     setApiData(response);
-//   };
-
-//   fetchData(); // Call fetchData immediately
-//   console.log('apiData:', apiData);
-// }, [searchQuery]);
+async function query(data: { question: string }): Promise<ApiResponse> {
+  const response = await fetch('http://localhost:3000/api/v1/prediction/806cae74-1096-434b-a003-8a5779b42c4a', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
+  });
+  const result: ApiResponse = (await response.json()) as ApiResponse; // Enforce ApiResponse type
+  console.log('Stuff', result);
+  return result;
+}
 
 export const Bot = (botProps: BotProps & { class?: string }) => {
   const [apiResponse, setApiResponse] = useState<ApiResponse | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  async function query(data: { question: string }): Promise<ApiResponse> {
-    const response = await fetch('http://localhost:3000/api/v1/prediction/806cae74-1096-434b-a003-8a5779b42c4a', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
-    });
-    const result: ApiResponse = (await response.json()) as ApiResponse; // Enforce ApiResponse type
-    console.log('Stuff', result);
-    return result;
-  }
+  
+
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true);
