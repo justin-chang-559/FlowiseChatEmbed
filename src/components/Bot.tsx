@@ -59,7 +59,7 @@ type observerConfigType = (accessor: string | boolean | object | MessageType[]) 
 export type observersConfigType = Record<'observeUserInput' | 'observeLoading' | 'observeMessages', observerConfigType>;
 
 export type BotProps = {
-  apicall: ApiResponse;
+  // apicall: ApiResponse;
   chatflowid: string;
   apiHost?: string;
   chatflowConfig?: Record<string, unknown>;
@@ -110,7 +110,6 @@ async function query(searchQuery: string): Promise<ApiResponse> {
 }
 
 const defaultWelcomeMessage = 'Need career assistance? Ask me anything!';
-
 
 const defaultBackgroundColor = '#0F2D52';
 const defaultTextColor = '#303235';
