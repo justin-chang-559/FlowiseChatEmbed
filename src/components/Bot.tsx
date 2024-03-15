@@ -748,12 +748,10 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
           </div>
         )}
 
-      <div>
-          {/* Display Stringified API Response */}
-          {apiResponse && ( 
-              <pre>{JSON.stringify(apiResponse, null, 2)}</pre> 
-          )}
-      </div>
+        
+        {/* Display Stringified API Response */}
+        <div>{<pre>{JSON.stringify(apiResponse, null, 2)}</pre>}</div>
+        
 
         {props.showTitle ? (
           <div
