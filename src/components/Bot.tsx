@@ -107,7 +107,8 @@ async function query(data: { question: string }): Promise<ApiResponse> {
     },
     body: JSON.stringify(data),
   });
-  const result: ApiResponse = (await response.json()) as ApiResponse; // Enforce ApiResponse type
+  // const result: ApiResponse = (await response.json()) as ApiResponse; // Enforce ApiResponse type
+  const result = await response.json();
   console.log('Stuff', result);
   return result;
 }
@@ -147,6 +148,7 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
 
   const data = query({ question: 'software Engineer' });
   console.log('data:', data);
+
   const props = mergeProps({ showTitle: true }, botProps);
   let chatContainer: HTMLDivElement | undefined;
   let bottomSpacer: HTMLDivElement | undefined;
@@ -382,6 +384,14 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
       const errorData = typeof err === 'string' ? err : err.response.data || `${err.response.status}: ${err.response.statusText}`;
       handleError(errorData);
       return;
+    }
+    try {
+      const apiData = await query({ question: 'software Engineer' });
+      setState({ apiData: [apiData] });
+
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      // Handle errors appropriately, e.g., display an error message
     }
   };
 
@@ -970,6 +980,9 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
   );
 };
 
+function setState(arg0: {apiData: ApiResponse[] }) {
+  throw new Error('Function not implemented.');
+}
 // type BottomSpacerProps = {
 //   ref: HTMLDivElement | undefined;
 // };
