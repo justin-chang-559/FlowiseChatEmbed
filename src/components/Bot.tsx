@@ -114,10 +114,7 @@ const defaultWelcomeMessage = 'Need career assistance? Ask me anything!';
 const defaultBackgroundColor = '#0F2D52';
 const defaultTextColor = '#303235';
 
-export const Bot = (botProps: BotProps & { class?: string }) => {
-  // set a default value for showTitle if not set and merge with other props
-  // import { io as lookup } from 'socket.io-client';
-  const [apiData, setApiData] = useState<ApiResponse>(); // Update the type of apiData
+const [apiData, setApiData] = useState<ApiResponse>(); // Update the type of apiData
   const [searchQuery, setSearchQuery] = useState('car');
   useEffect(() => {
     const fetchData = async () => {
@@ -128,6 +125,10 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
     fetchData(); // Call fetchData immediately
     console.log('apiData:', apiData);
   }, [searchQuery]);
+
+export const Bot = (botProps: BotProps & { class?: string }) => {
+  // set a default value for showTitle if not set and merge with other props
+  // import { io as lookup } from 'socket.io-client';
 
   const props = mergeProps({ showTitle: true }, botProps);
   let chatContainer: HTMLDivElement | undefined;
