@@ -95,19 +95,19 @@ interface ApiResponse {
   jobs?: JobListing[]; // Optional jobs array
 }
 
-async function query(searchQuery: string): Promise<ApiResponse> {
-  const response = await fetch('http://localhost:3000/api/v1/prediction/806cae74-1096-434b-a003-8a5779b42c4a', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ question: searchQuery }),
-  });
+// async function query(searchQuery: string): Promise<ApiResponse> {
+//   const response = await fetch('http://localhost:3000/api/v1/prediction/806cae74-1096-434b-a003-8a5779b42c4a', {
+//     method: 'POST',
+//     headers: {
+//       'Content-Type': 'application/json',
+//     },
+//     body: JSON.stringify({ question: searchQuery }),
+//   });
 
-  const result: ApiResponse = await response.json(); // Type the result
-  console.log('result inside query:', result);
-  return result;
-}
+//   const result: ApiResponse = await response.json(); // Type the result
+//   console.log('result inside query:', result);
+//   return result;
+// }
 
 const defaultWelcomeMessage = 'Need career assistance? Ask me anything!';
 
