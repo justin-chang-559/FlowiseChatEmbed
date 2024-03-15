@@ -117,8 +117,6 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  
-
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true);
@@ -750,28 +748,12 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
           </div>
         )}
 
-        <div>
-          {isLoading && <div>Loading...</div>}
-          {error && <div>Error: {error}</div>}
-
-          {/* Conditional Rendering with <Show> */}
-          <Show when={apiResponse && apiResponse.jobs}>
-            <div class="card-container">
-              {/* Since .map isn't ideal here, render the cards with <Show> */}
-              <For each={apiResponse?.jobs}>
-                {(job) => (
-                  <div class="job-card-wrapper">
-                    <div class="job-card">
-                      <h2>{job.name}</h2>
-                      <p>Company: {job.company}</p>
-                      <p>Wage: {job.wage}</p>
-                    </div>
-                  </div>
-                )}
-              </For>
-            </div>
-          </Show>
-        </div>
+      <div>
+          {/* Display Stringified API Response */}
+          {apiResponse && ( 
+              <pre>{JSON.stringify(apiResponse, null, 2)}</pre> 
+          )}
+      </div>
 
         {props.showTitle ? (
           <div
