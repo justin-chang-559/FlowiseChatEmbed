@@ -119,8 +119,6 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  
-
   // const apiData = query({ question: 'software Engineer' });
   // console.log('data:', apiData);
 
@@ -360,15 +358,14 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
       handleError(errorData);
       return;
     }
-    useEffect(() => {
       const fetchData = async () => {
         setIsLoading(true);
         setError(null);
-  
+
         try {
           const response = await query({ question: 'software Engineer' });
           const result: ApiResponse = await response;
-  
+
           // Parse 'text' property and update state
           if (result.text) {
             const jobListings: JobListing[] = JSON.parse(result.text);
@@ -384,9 +381,8 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
           setIsLoading(false);
         }
       };
-  
+
       fetchData(); // Execute the fetch function
-    }, []);
   };
 
   const clearChat = () => {
