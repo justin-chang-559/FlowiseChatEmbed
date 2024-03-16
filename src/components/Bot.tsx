@@ -96,10 +96,6 @@ interface ApiResponse {
   jobs: JobListing[] | null; // Updated property
 }
 
-
-
-
-
 const defaultWelcomeMessage = 'Need career assistance? Ask me anything!';
 
 const defaultBackgroundColor = '#0F2D52';
@@ -119,20 +115,18 @@ async function query(data: { question: string }): Promise<ApiResponse> {
   return result;
 }
 
-export const Bot =  (botProps: BotProps & { class?: string }) => {
+export const Bot = (botProps: BotProps & { class?: string }) => {
   const [apiData, setApiData] = createSignal<ApiResponse | null>(null);
-  createEffect( async () => {
+  createEffect(async () => {
     try {
       const data = await query({ question: 'software Engineer' });
       setApiData(data); // Update state with resolved data
       console.log('Data', data);
-    }
-    catch (error) {
+    } catch (error) {
       console.error('Error fetching data:', error);
       // Handle errors appropriately, e.g., display an error message
     }
   });
-  
 
   const props = mergeProps({ showTitle: true }, botProps);
   let chatContainer: HTMLDivElement | undefined;
@@ -739,19 +733,33 @@ export const Bot =  (botProps: BotProps & { class?: string }) => {
                     <span>Max Allowed Size: {allowed.maxUploadSize} MB</span>
                   </>
                 );
-                }}
+              }}
+            </For>
+          </div>
+        )}
+
+        {/* <Show when={apiData()}>
+          <div class="api-data-container">
+            <pre>{JSON.stringify(apiData(), null, 2)}</pre>
+          </div>
+        </Show> */}
+        <Show when={apiData()}>
+          <div class="api-data-container">
+            <div class="card-container">
+              <For each={apiData()?.jobs}>
+                {(job) => (
+                  <div class="job-card-wrapper">
+                    <div class="job-card">
+                      <h2>{job.name}</h2>
+                      <p>Company: {job.company}</p>
+                      <p>Wage: {job.wage}</p>
+                    </div>
+                  </div>
+                )}
               </For>
-              </div>
-            )}
-
-            <Show when={apiData()}>
-              <div class = "api-data-container">
-                  <pre>{JSON.stringify(apiData(), null, 2)}</pre>
-              </div>
-            </Show>
-        
-
-        
+            </div>
+          </div>
+        </Show>
 
         {props.showTitle ? (
           <div
