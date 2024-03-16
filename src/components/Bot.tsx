@@ -101,8 +101,6 @@ const defaultWelcomeMessage = 'Need career assistance? Ask me anything!';
 const defaultBackgroundColor = '#0F2D52';
 const defaultTextColor = '#303235';
 
-
-
 async function query(data: { question: string }): Promise<ApiResponse> {
   const response = await fetch('http://localhost:3000/api/v1/prediction/806cae74-1096-434b-a003-8a5779b42c4a', {
     method: 'POST',
@@ -122,8 +120,6 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
   const [isLoading, setIsLoading] = useState(false);
   // setApiData(query({ question: 'software Engineer' }));
   // console.log('apiData:', apiData);
-  
-
 
   const props = mergeProps({ showTitle: true }, botProps);
   let chatContainer: HTMLDivElement | undefined;
@@ -361,13 +357,13 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
       handleError(errorData);
       return;
     }
-    useEffect(() => {
-      const fetchData = async () => {
-        const data = await query({ question: 'software Engineer' });
-        setApiData(data); // Update state with resolved data
-      };
-      fetchData();
-    }, []);
+    // useEffect(() => {
+    //   const fetchData = async () => {
+    //     const data = await query({ question: 'software Engineer' });
+    //     setApiData(data); // Update state with resolved data
+    //   };
+    //   fetchData();
+    // }, []);
   };
 
   const clearChat = () => {
