@@ -114,20 +114,18 @@ async function query(data: { question: string }): Promise<ApiResponse> {
   return result;
 }
 
-const [apiData, setApiData] = useState<ApiResponse | null>({} as ApiResponse) // Or an empty object {}
+const [apiData, setApiData] = useState<ApiResponse | null>({} as ApiResponse); // Or an empty object {}
 
-  useEffect(() => {
-    const fetchData = async () => {
-        const data = await query({ question: 'software Engineer' });
-        setApiData(data);
-    }
-    fetchData();
+useEffect(() => {
+  const fetchData = async () => {
+    const data = await query({ question: 'software Engineer' });
+    setApiData(data);
+  };
+  fetchData();
 }, []);
 console.log('apiData:', apiData);
 
 export const Bot = (botProps: BotProps & { class?: string }) => {
-  
-
   const props = mergeProps({ showTitle: true }, botProps);
   let chatContainer: HTMLDivElement | undefined;
   let bottomSpacer: HTMLDivElement | undefined;
@@ -741,9 +739,9 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
 
         {/* Display Stringified API Response */}
         {apiData && (
-            <div class="api call" style={{ color: 'black' }}>
-                  <pre>{JSON.stringify(apiData, null, 2)}</pre>
-            </div>
+          <div class="api call" style={{ color: 'black' }}>
+            <pre>{JSON.stringify(apiData, null, 2)}</pre>
+          </div>
         )}
         {props.showTitle ? (
           <div
