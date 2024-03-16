@@ -18,7 +18,6 @@ import { CircleDotIcon, TrashIcon } from './icons';
 import { CancelButton } from './buttons/CancelButton';
 import { cancelAudioRecording, startAudioRecording, stopAudioRecording } from '@/utils/audioRecording';
 import { useState, useEffect } from 'react';
-import { result } from 'lodash';
 export type FileEvent<T = EventTarget> = {
   target: T;
 };
@@ -115,9 +114,12 @@ async function query(data: { question: string }): Promise<ApiResponse> {
 }
 
 export const Bot = (botProps: BotProps & { class?: string }) => {
-  const [apiResponse, setApiResponse] = useState<ApiResponse | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  // const [apiResponse, setApiResponse] = useState<ApiResponse | null>(null);
+  // const [isLoading, setIsLoading] = useState(false);
+  // const [error, setError] = useState<string | null>(null);
+  const [apiData, setApiData] = useState({});
+
+  
 
   // const apiData = query({ question: 'software Engineer' });
   // console.log('data:', apiData);
@@ -358,29 +360,16 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
       handleError(errorData);
       return;
     }
-    
-      setIsLoading(true);
-      setError(null);
+    try {
+      const apiData = await query({ question: 'software Engineer' });
+      // setApiResponse(apiData);
+      setApiData(apiData);
 
-      try {
-        const response = await query({ question: 'software Engineer' });
-        const result: ApiResponse = await response;
-
-        // Parse 'text' property and update state
-        if (result.text) {
-          const jobListings: JobListing[] = JSON.parse(result.text);
-          setApiResponse({ ...result, jobs: jobListings });
-          console.log('result:', result);
-        } else {
-          setApiResponse(result);
-        }
-      } catch (error) {
-        setError('Error fetching data');
-        console.error('Error:', error);
-      } finally {
-        setIsLoading(false);
-      }
-     // Execute the fetch function
+      console.log('apiData:', apiData);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      // Handle errors appropriately, e.g., display an error message
+    }
   };
 
   const clearChat = () => {
@@ -755,7 +744,7 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
             color: 'black',
           }}
         >
-          <pre>{JSON.stringify(apiResponse, null, 2)}</pre>
+          <pre>{JSON.stringify(apiData, null, 2)}</pre>
         </div>
 
         {props.showTitle ? (
@@ -968,9 +957,7 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
   );
 };
 
-function setState(arg0: { apiData: ApiResponse[] }) {
-  throw new Error('Function not implemented.');
-}
+
 // type BottomSpacerProps = {
 //   ref: HTMLDivElement | undefined;
 // };
