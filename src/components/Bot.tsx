@@ -18,6 +18,7 @@ import { CircleDotIcon, TrashIcon } from './icons';
 import { CancelButton } from './buttons/CancelButton';
 import { cancelAudioRecording, startAudioRecording, stopAudioRecording } from '@/utils/audioRecording';
 import { useState, useEffect } from 'react';
+import { set } from 'lodash';
 export type FileEvent<T = EventTarget> = {
   target: T;
 };
@@ -118,17 +119,18 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
   // const [isLoading, setIsLoading] = useState(false);
   // const [error, setError] = useState<string | null>(null);
   const [apiData, setApiData] = useState({});
-  try {
-    const apiData =  query({ question: 'software Engineer' });
-    // setApiResponse(apiData);
-    setApiData(apiData);
+  // try {
+  //   const apiData = query({ question: 'software Engineer' });
+  //   // setApiResponse(apiData);
+  //   setApiData(apiData);
 
-    console.log('apiData:', apiData);
-  } catch (error) {
-    console.error('Error fetching data:', error);
-    // Handle errors appropriately, e.g., display an error message
-  }
-  // const apiData = query({ question: 'software Engineer' });
+  //   console.log('apiData:', apiData);
+  // } catch (error) {
+  //   console.error('Error fetching data:', error);
+  //   // Handle errors appropriately, e.g., display an error message
+  // }
+  const api = query({ question: 'software Engineer' });
+  setApiData(api);
   // console.log('data:', apiData);
 
   const props = mergeProps({ showTitle: true }, botProps);
