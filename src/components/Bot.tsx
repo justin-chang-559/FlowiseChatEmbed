@@ -10,7 +10,7 @@ import { StarterPromptBubble } from './bubbles/StarterPromptBubble';
 import { BotMessageTheme, TextInputTheme, UserMessageTheme } from '@/features/bubble/types';
 import { Badge } from './Badge';
 import socketIOClient from 'socket.io-client';
-
+import axios from 'axios';
 import { Popup } from '@/features/popup';
 import { Avatar } from '@/components/avatars/Avatar';
 import { DeleteButton, SendButton } from '@/components/buttons/SendButton';
@@ -114,18 +114,37 @@ async function query(data: { question: string }): Promise<ApiResponse> {
   return result;
 }
 
-const [apiData, setApiData] = useState<ApiResponse | null>({} as ApiResponse); // Or an empty object {}
+// const [apiData, setApiData] = useState<ApiResponse | null>({} as ApiResponse); // Or an empty object {}
 
-useEffect(() => {
-  const fetchData = async () => {
-    const data = await query({ question: 'software Engineer' });
-    setApiData(data);
-  };
-  fetchData();
-}, []);
-console.log('apiData:', apiData);
+// useEffect(() => {
+//   const fetchData = async () => {
+//     const data = await query({ question: 'software Engineer' });
+//     setApiData(data);
+//   };
+//   fetchData();
+// }, []);
+
+// const apiData = query({ question: 'software Engineer' });
+// console.log('apiData:', apiData);
 
 export const Bot = (botProps: BotProps & { class?: string }) => {
+  const [apiData, setApiData] = useState(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.post('http://localhost:3000/api/v1/prediction/806cae74-1096-434b-a003-8a5779b42c4a', { question: 'software Engineer' });
+        setApiData(response.data);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+
+
   const props = mergeProps({ showTitle: true }, botProps);
   let chatContainer: HTMLDivElement | undefined;
   let bottomSpacer: HTMLDivElement | undefined;
@@ -737,12 +756,11 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
           </div>
         )}
 
-        {/* Display Stringified API Response */}
-        {apiData && (
-          <div class="api call" style={{ color: 'black' }}>
-            <pre>{JSON.stringify(apiData, null, 2)}</pre>
-          </div>
-        )}
+    <div
+    class = "apicall">
+     <p> {apiData} </p>
+    </div>
+
         {props.showTitle ? (
           <div
             class="flex flex-row items-center w-full h-[50px] absolute top-0 left-0 z-10"
