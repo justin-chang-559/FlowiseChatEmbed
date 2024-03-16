@@ -115,23 +115,8 @@ async function query(data: { question: string }): Promise<ApiResponse> {
 }
 
 export const Bot = (botProps: BotProps & { class?: string }) => {
-  // const [apiResponse, setApiResponse] = useState<ApiResponse | null>(null);
-  // const [isLoading, setIsLoading] = useState(false);
-  // const [error, setError] = useState<string | null>(null);
-  const [apiData, setApiData] = useState({});
-  // try {
-  //   const apiData = query({ question: 'software Engineer' });
-  //   // setApiResponse(apiData);
-  //   setApiData(apiData);
-
-  //   console.log('apiData:', apiData);
-  // } catch (error) {
-  //   console.error('Error fetching data:', error);
-  //   // Handle errors appropriately, e.g., display an error message
-  // }
-  const api = query({ question: 'software Engineer' });
-  setApiData(api);
-  // console.log('data:', apiData);
+  const apiData = query({ question: 'software Engineer' });
+  console.log('apiData:', apiData);
 
   const props = mergeProps({ showTitle: true }, botProps);
   let chatContainer: HTMLDivElement | undefined;
@@ -370,11 +355,9 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
       return;
     }
     // try {
-    //   const apiData = await query({ question: 'software Engineer' });
-    //   // setApiResponse(apiData);
-    //   setApiData(apiData);
-
+    //   const apiData = query({ question: 'software Engineer' });
     //   console.log('apiData:', apiData);
+
     // } catch (error) {
     //   console.error('Error fetching data:', error);
     //   // Handle errors appropriately, e.g., display an error message
