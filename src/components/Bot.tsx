@@ -358,31 +358,29 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
       handleError(errorData);
       return;
     }
-      const fetchData = async () => {
-        setIsLoading(true);
-        setError(null);
+    
+      setIsLoading(true);
+      setError(null);
 
-        try {
-          const response = await query({ question: 'software Engineer' });
-          const result: ApiResponse = await response;
+      try {
+        const response = await query({ question: 'software Engineer' });
+        const result: ApiResponse = await response;
 
-          // Parse 'text' property and update state
-          if (result.text) {
-            const jobListings: JobListing[] = JSON.parse(result.text);
-            setApiResponse({ ...result, jobs: jobListings });
-            console.log('result:', result);
-          } else {
-            setApiResponse(result);
-          }
-        } catch (error) {
-          setError('Error fetching data');
-          console.error('Error:', error);
-        } finally {
-          setIsLoading(false);
+        // Parse 'text' property and update state
+        if (result.text) {
+          const jobListings: JobListing[] = JSON.parse(result.text);
+          setApiResponse({ ...result, jobs: jobListings });
+          console.log('result:', result);
+        } else {
+          setApiResponse(result);
         }
-      };
-
-      fetchData(); // Execute the fetch function
+      } catch (error) {
+        setError('Error fetching data');
+        console.error('Error:', error);
+      } finally {
+        setIsLoading(false);
+      }
+     // Execute the fetch function
   };
 
   const clearChat = () => {
