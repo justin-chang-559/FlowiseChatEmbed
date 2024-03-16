@@ -116,8 +116,8 @@ async function query(data: { question: string }): Promise<ApiResponse> {
 }
 
 export const Bot = (botProps: BotProps & { class?: string }) => {
-  const [apiData, setApiData] = useState<ApiResponse | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
+  // const [apiData, setApiData] = useState<ApiResponse | null>(null);
+  // const [isLoading, setIsLoading] = useState(false);
   // setApiData(query({ question: 'software Engineer' }));
   // console.log('apiData:', apiData);
 
