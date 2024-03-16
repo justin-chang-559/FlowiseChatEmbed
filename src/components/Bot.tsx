@@ -96,11 +96,12 @@ interface ApiResponse {
   jobs: JobListing[] | null; // Updated property
 }
 
-
 const defaultWelcomeMessage = 'Need career assistance? Ask me anything!';
 
 const defaultBackgroundColor = '#0F2D52';
 const defaultTextColor = '#303235';
+
+
 
 async function query(data: { question: string }): Promise<ApiResponse> {
   const response = await fetch('http://localhost:3000/api/v1/prediction/806cae74-1096-434b-a003-8a5779b42c4a', {
@@ -116,43 +117,13 @@ async function query(data: { question: string }): Promise<ApiResponse> {
   return result;
 }
 
-// const [apiData, setApiData] = useState<ApiResponse | null>({} as ApiResponse); // Or an empty object {}
-
-// useEffect(() => {
-//   const fetchData = async () => {
-//     const data = await query({ question: 'software Engineer' });
-//     setApiData(data);
-//   };
-//   fetchData();
-// }, []);
-
-// const apiData = query({ question: 'software Engineer' });
-// console.log('apiData:', apiData);
-
 export const Bot = (botProps: BotProps & { class?: string }) => {
-  const [apiData, setApiData] = useState<Promise<ApiResponse> | null>(null);
-  setApiData(query({ question: 'software Engineer' }));
-  console.log('apiData:', apiData);
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       const response = await axios.post(
-  //         'http://localhost:3000/api/v1/prediction/806cae74-1096-434b-a003-8a5779b42c4a',
-  //         { question: 'Hey, how are you?' },
-  //         {
-  //           headers: {
-  //             'Content-Type': 'application/json',
-  //           },
-  //         },
-  //       );
-  //       setApiData(response.data);
-  //     } catch (error) {
-  //       console.error('Error fetching data:', error);
-  //     }
-  //   };
+  const [apiData, setApiData] = useState<ApiResponse | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  // setApiData(query({ question: 'software Engineer' }));
+  // console.log('apiData:', apiData);
+  
 
-  //   fetchData();
-  // }, []);
 
   const props = mergeProps({ showTitle: true }, botProps);
   let chatContainer: HTMLDivElement | undefined;
@@ -390,14 +361,13 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
       handleError(errorData);
       return;
     }
-    // try {
-    //   const apiData = query({ question: 'software Engineer' });
-    //   console.log('apiData:', apiData);
-
-    // } catch (error) {
-    //   console.error('Error fetching data:', error);
-    //   // Handle errors appropriately, e.g., display an error message
-    // }
+    useEffect(() => {
+      const fetchData = async () => {
+        const data = await query({ question: 'software Engineer' });
+        setApiData(data); // Update state with resolved data
+      };
+      fetchData();
+    }, []);
   };
 
   const clearChat = () => {
@@ -765,9 +735,7 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
           </div>
         )}
 
-        <div class="apicall">
-          {/* {apiData && <p>{apiData}</p>}  */}
-        </div>
+        {/* <div class="apicall">{apiData && <p>{apiData}</p>} </div> */}
 
         {props.showTitle ? (
           <div
