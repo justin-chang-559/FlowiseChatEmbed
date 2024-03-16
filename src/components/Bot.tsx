@@ -18,7 +18,7 @@ import { CircleDotIcon, TrashIcon } from './icons';
 import { CancelButton } from './buttons/CancelButton';
 import { cancelAudioRecording, startAudioRecording, stopAudioRecording } from '@/utils/audioRecording';
 import { useState, useEffect } from 'react';
-import { set } from 'lodash';
+import { create, set } from 'lodash';
 import { text } from 'stream/consumers';
 export type FileEvent<T = EventTarget> = {
   target: T;
@@ -96,6 +96,10 @@ interface ApiResponse {
   jobs: JobListing[] | null; // Updated property
 }
 
+
+
+
+
 const defaultWelcomeMessage = 'Need career assistance? Ask me anything!';
 
 const defaultBackgroundColor = '#0F2D52';
@@ -115,11 +119,20 @@ async function query(data: { question: string }): Promise<ApiResponse> {
   return result;
 }
 
-export const Bot = (botProps: BotProps & { class?: string }) => {
-  // const [apiData, setApiData] = useState<ApiResponse | null>(null);
-  // const [isLoading, setIsLoading] = useState(false);
-  // setApiData(query({ question: 'software Engineer' }));
-  // console.log('apiData:', apiData);
+export const Bot =  (botProps: BotProps & { class?: string }) => {
+  const [apiData, setApiData] = createSignal<ApiResponse | null>(null);
+  createEffect( async () => {
+    try {
+      const data = await query({ question: 'software Engineer' });
+      setApiData(data); // Update state with resolved data
+      console.log('Data', data);
+    }
+    catch (error) {
+      console.error('Error fetching data:', error);
+      // Handle errors appropriately, e.g., display an error message
+    }
+  });
+  
 
   const props = mergeProps({ showTitle: true }, botProps);
   let chatContainer: HTMLDivElement | undefined;
@@ -726,12 +739,19 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
                     <span>Max Allowed Size: {allowed.maxUploadSize} MB</span>
                   </>
                 );
-              }}
-            </For>
-          </div>
-        )}
+                }}
+              </For>
+              </div>
+            )}
 
-        {/* <div class="apicall">{apiData && <p>{apiData}</p>} </div> */}
+            <Show when={apiData()}>
+              <div class = "api-data-container">
+                  <pre>{JSON.stringify(apiData(), null, 2)}</pre>
+              </div>
+            </Show>
+        
+
+        
 
         {props.showTitle ? (
           <div
