@@ -19,6 +19,7 @@ import { CancelButton } from './buttons/CancelButton';
 import { cancelAudioRecording, startAudioRecording, stopAudioRecording } from '@/utils/audioRecording';
 import { useState, useEffect } from 'react';
 import { set } from 'lodash';
+import { text } from 'stream/consumers';
 export type FileEvent<T = EventTarget> = {
   target: T;
 };
@@ -95,6 +96,7 @@ interface ApiResponse {
   jobs: JobListing[] | null; // Updated property
 }
 
+
 const defaultWelcomeMessage = 'Need career assistance? Ask me anything!';
 
 const defaultBackgroundColor = '#0F2D52';
@@ -128,28 +130,29 @@ async function query(data: { question: string }): Promise<ApiResponse> {
 // console.log('apiData:', apiData);
 
 export const Bot = (botProps: BotProps & { class?: string }) => {
-  const [apiData, setApiData] = useState(null);
+  const [apiData, setApiData] = useState<Promise<ApiResponse> | null>(null);
+  setApiData(query({ question: 'software Engineer' }));
+  console.log('apiData:', apiData);
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const response = await axios.post(
+  //         'http://localhost:3000/api/v1/prediction/806cae74-1096-434b-a003-8a5779b42c4a',
+  //         { question: 'Hey, how are you?' },
+  //         {
+  //           headers: {
+  //             'Content-Type': 'application/json',
+  //           },
+  //         },
+  //       );
+  //       setApiData(response.data);
+  //     } catch (error) {
+  //       console.error('Error fetching data:', error);
+  //     }
+  //   };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.post(
-          'http://localhost:3000/api/v1/prediction/806cae74-1096-434b-a003-8a5779b42c4a',
-          { question: 'Hey, how are you?' },
-          {
-            headers: {
-              'Content-Type': 'application/json'
-            }
-          }
-        );
-        setApiData(response.data);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    };
-
-    fetchData();
-  }, []);
+  //   fetchData();
+  // }, []);
 
   const props = mergeProps({ showTitle: true }, botProps);
   let chatContainer: HTMLDivElement | undefined;
@@ -763,7 +766,7 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
         )}
 
         <div class="apicall">
-          <p> {apiData} </p>
+          {/* {apiData && <p>{apiData}</p>}  */}
         </div>
 
         {props.showTitle ? (
