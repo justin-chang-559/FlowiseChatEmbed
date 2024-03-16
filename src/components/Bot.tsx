@@ -119,8 +119,6 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
   // const [error, setError] = useState<string | null>(null);
   const [apiData, setApiData] = useState({});
 
-  
-
   // const apiData = query({ question: 'software Engineer' });
   // console.log('data:', apiData);
 
@@ -956,7 +954,6 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
     </>
   );
 };
-
 
 // type BottomSpacerProps = {
 //   ref: HTMLDivElement | undefined;
