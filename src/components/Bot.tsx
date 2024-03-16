@@ -118,7 +118,16 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
   // const [isLoading, setIsLoading] = useState(false);
   // const [error, setError] = useState<string | null>(null);
   const [apiData, setApiData] = useState({});
+  try {
+    const apiData =  query({ question: 'software Engineer' });
+    // setApiResponse(apiData);
+    setApiData(apiData);
 
+    console.log('apiData:', apiData);
+  } catch (error) {
+    console.error('Error fetching data:', error);
+    // Handle errors appropriately, e.g., display an error message
+  }
   // const apiData = query({ question: 'software Engineer' });
   // console.log('data:', apiData);
 
@@ -358,16 +367,16 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
       handleError(errorData);
       return;
     }
-    try {
-      const apiData = await query({ question: 'software Engineer' });
-      // setApiResponse(apiData);
-      setApiData(apiData);
+    // try {
+    //   const apiData = await query({ question: 'software Engineer' });
+    //   // setApiResponse(apiData);
+    //   setApiData(apiData);
 
-      console.log('apiData:', apiData);
-    } catch (error) {
-      console.error('Error fetching data:', error);
-      // Handle errors appropriately, e.g., display an error message
-    }
+    //   console.log('apiData:', apiData);
+    // } catch (error) {
+    //   console.error('Error fetching data:', error);
+    //   // Handle errors appropriately, e.g., display an error message
+    // }
   };
 
   const clearChat = () => {
