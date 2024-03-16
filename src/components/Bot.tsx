@@ -133,7 +133,15 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.post('http://localhost:3000/api/v1/prediction/806cae74-1096-434b-a003-8a5779b42c4a', { question: 'software Engineer' });
+        const response = await axios.post(
+          'http://localhost:3000/api/v1/prediction/806cae74-1096-434b-a003-8a5779b42c4a',
+          { question: 'Hey, how are you?' },
+          {
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          }
+        );
         setApiData(response.data);
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -142,8 +150,6 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
 
     fetchData();
   }, []);
-
-
 
   const props = mergeProps({ showTitle: true }, botProps);
   let chatContainer: HTMLDivElement | undefined;
@@ -756,10 +762,9 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
           </div>
         )}
 
-    <div
-    class = "apicall">
-     <p> {apiData} </p>
-    </div>
+        <div class="apicall">
+          <p> {apiData} </p>
+        </div>
 
         {props.showTitle ? (
           <div
