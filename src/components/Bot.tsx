@@ -122,7 +122,7 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
       const data = await query({ question: 'software Engineer' });
       setApiData(data); // Update state with resolved data
       console.log('Data', data.text);
-      console.log('type', data.text);
+      console.log('type', typeof data.text);
     } catch (error) {
       console.error('Error fetching data:', error);
       // Handle errors appropriately, e.g., display an error message
