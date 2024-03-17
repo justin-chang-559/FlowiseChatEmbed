@@ -434,3 +434,23 @@ input {
   padding: 10px 10px;
   font-family: 'Poppins', sans-serif;
 }
+
+/* Example - adjust as needed */
+.card-container {
+  /* Any existing styles for the container */
+}
+
+.job-card-wrapper {
+  animation: fadein 0.5s;
+  padding: 1rem 1.5rem 1rem 1.5rem;
+  background-color: #25C8FA; /* Your desired blue color */ 
+  margin-bottom: 15px; 
+  width: 300px;
+  padding: 10px; 
+  border-radius: 20px; /* Apply rounded edges */
+} 
+
+.job-card { 
+  /* Any existing styles for the card content */
+  padding: 10px;
+}  
