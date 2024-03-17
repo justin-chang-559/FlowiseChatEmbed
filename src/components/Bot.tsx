@@ -90,7 +90,7 @@ interface JobListing {
 }
 
 interface ApiResponse {
-  text: string // JSON array as a string
+  text: string; // JSON array as a string
   chatMessageId: string;
   chatId: string;
   jobs: JobListing[] | null; // Updated property
@@ -121,10 +121,10 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
     try {
       const data = await query({ question: 'software Engineer' });
       const parsedJobs = JSON.parse(data.text) as JobListing[]; // Parse the JSON
-      setApiData({  ...data, jobs: parsedJobs });
+      setApiData({ ...data, jobs: parsedJobs });
       // setApiData(data); // Update state with resolved data
-      console.log('Data', data.text);
-      console.log('type', typeof data.text);
+      console.log('Data', data.jobs);
+      console.log('type', typeof data.jobs);
     } catch (error) {
       console.error('Error fetching data:', error);
       // Handle errors appropriately, e.g., display an error message
@@ -746,10 +746,10 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
             <pre>{JSON.stringify(apiData(), null, 2)}</pre>
           </div>
         </Show> */}
-        <Show when={apiData()?.text}>
+        <Show when={apiData()?.jobs}>
           <div class="api-data-container">
             <div class="card-container">
-              <For each={apiData()?.jobs }>
+              <For each={apiData()?.jobs}>
                 {(job) => {
                   // Type enforcement and index access
                   return (
