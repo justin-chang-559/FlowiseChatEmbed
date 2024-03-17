@@ -90,7 +90,7 @@ interface JobListing {
 }
 
 interface ApiResponse {
-  text: JobListing[] | null ; // JSON array as a string
+  text: JobListing[] | null; // JSON array as a string
   chatMessageId: string;
   chatId: string;
   jobs: JobListing[] | null; // Updated property
@@ -121,7 +121,8 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
     try {
       const data = await query({ question: 'software Engineer' });
       setApiData(data); // Update state with resolved data
-      console.log('Data', data);
+      console.log('Data', data.text);
+      console.log('type', data.text);
     } catch (error) {
       console.error('Error fetching data:', error);
       // Handle errors appropriately, e.g., display an error message
