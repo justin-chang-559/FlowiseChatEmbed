@@ -144,7 +144,7 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
   const [messages, setMessages] = createSignal<MessageType[]>(
     [
       {
-        message: 'Hi i am justin',
+        message: 'Hello! I am G-AI, your personal assistant. Let me recommend some job opportunities. How can I help you today?',
         // message: props.welcomeMessage ?? defaultWelcomeMessage,
         type: 'apiMessage',
       },

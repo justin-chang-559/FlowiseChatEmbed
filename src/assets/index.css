@@ -7,14 +7,14 @@
   --chatbot-container-bg-color: transparent;
   --chatbot-container-font-family: 'Open Sans';
   /* Changed color here */
-  --chatbot-button-bg-color: #25C8FA;  
+  --chatbot-button-bg-color: #19b99a;  
   --chatbot-button-color: #ffffff;
 
   --chatbot-host-bubble-bg-color: #f7f8ff;
   --chatbot-host-bubble-color: #303235;
   /* Changed color here */
 
-  --chatbot-guest-bubble-bg-color: #25C8FA;
+  --chatbot-guest-bubble-bg-color: #19b99a;
   --chatbot-guest-bubble-color: #ffffff;
 
   --chatbot-input-bg-color: #ffffff;
@@ -445,11 +445,18 @@ input {
 .job-card-wrapper {
   animation: fadein 0.5s;
   padding: 1rem 1.5rem 1rem 1.5rem;
-  background-color: #25C8FA; /* Your desired blue color */ 
+  background-color: #19b99a; /* Your desired blue color */ 
   margin-bottom: 15px; 
   width: 300px;
   padding: 10px; 
   border-radius: 20px; /* Apply rounded edges */
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+  transition: 0.3s;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: left;
+
 } 
 
 .job-card { 
