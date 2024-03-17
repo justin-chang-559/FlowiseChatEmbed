@@ -6,14 +6,15 @@
   --chatbot-container-bg-image: none;
   --chatbot-container-bg-color: transparent;
   --chatbot-container-font-family: 'Open Sans';
-
-  --chatbot-button-bg-color: #0042da;
+  /* Changed color here */
+  --chatbot-button-bg-color: #25C8FA;  
   --chatbot-button-color: #ffffff;
 
   --chatbot-host-bubble-bg-color: #f7f8ff;
   --chatbot-host-bubble-color: #303235;
+  /* Changed color here */
 
-  --chatbot-guest-bubble-bg-color: #3b81f6;
+  --chatbot-guest-bubble-bg-color: #25C8FA;
   --chatbot-guest-bubble-color: #ffffff;
 
   --chatbot-input-bg-color: #ffffff;
@@ -213,10 +214,11 @@ textarea {
 .chatbot-host-bubble video {
   border-radius: var(--chatbot-border-radius);
 }
+  /* Changed color here */
 
 .chatbot-guest-bubble {
   color: var(--chatbot-guest-bubble-color);
-  background-color: #3b81f6;
+  background-color: #25C8FA;
   border-radius: 6px;
 }
 

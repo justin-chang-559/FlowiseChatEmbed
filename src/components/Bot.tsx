@@ -778,31 +778,30 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
             ref={chatContainer}
             class="overflow-y-scroll flex flex-col flex-grow min-w-full w-full px-3 pt-[70px] relative scrollable-container chatbot-chat-view scroll-smooth"
           >
-
             <Show when={apiData()?.jobs}>
-                        <div class="api-data-container">
-                          <div class="card-container">
-                          <For each={apiData()?.jobs}>
-                            {(job) => {
-                              // Type enforcement and index access
-                              return (
-                                <div class="job-card-wrapper">
-                                  {' '}
-                                  {/* Using 'name' as a placeholder key */}
-                                  <div class="job-card">
-                                    <h2>{job.name}</h2>
-                                    <p>Company: {job.company}</p>
-                                    <p>Wage: {job.wage}</p>
-                                    {/* Add job_type, details, and explanation if you want to display them */}
-                                  </div>
-                                </div>
-                              );
-                            }}
-                          </For>
+              <div class="api-data-container">
+                <div class="card-container">
+                  <For each={apiData()?.jobs}>
+                    {(job) => {
+                      // Type enforcement and index access
+                      return (
+                        <div class="job-card-wrapper">
+                          {' '}
+                          {/* Using 'name' as a placeholder key */}
+                          <div class="job-card">
+                            <h2>{job.name}</h2>
+                            <p>Company: {job.company}</p>
+                            <p>Wage: {job.wage}</p>
+                            {/* Add job_type, details, and explanation if you want to display them */}
                           </div>
                         </div>
-                    </Show>
-            
+                      );
+                    }}
+                  </For>
+                </div>
+              </div>
+            </Show>
+
             <For each={[...messages()]}>
               {(message, index) => {
                 return (
