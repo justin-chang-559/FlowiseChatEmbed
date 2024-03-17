@@ -90,7 +90,7 @@ interface JobListing {
 }
 
 interface ApiResponse {
-  text: JobListing[] | null; // JSON array as a string
+  text: string // JSON array as a string
   chatMessageId: string;
   chatId: string;
   jobs: JobListing[] | null; // Updated property
@@ -120,7 +120,9 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
   createEffect(async () => {
     try {
       const data = await query({ question: 'software Engineer' });
-      setApiData(data); // Update state with resolved data
+      const parsedJobs = JSON.parse(data.text) as JobListing[]; // Parse the JSON
+      setApiData({  ...data, jobs: parsedJobs });
+      // setApiData(data); // Update state with resolved data
       console.log('Data', data.text);
       console.log('type', typeof data.text);
     } catch (error) {
@@ -747,7 +749,7 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
         <Show when={apiData()?.text}>
           <div class="api-data-container">
             <div class="card-container">
-              <For each={apiData()?.text}>
+              <For each={apiData()?.jobs }>
                 {(job) => {
                   // Type enforcement and index access
                   return (
