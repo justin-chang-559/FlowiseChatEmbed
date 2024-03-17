@@ -123,8 +123,9 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
       const parsedJobs = JSON.parse(data.text) as JobListing[]; // Parse the JSON
       setApiData({ ...data, jobs: parsedJobs });
       // setApiData(data); // Update state with resolved data
-      console.log('Data', data.jobs);
-      console.log('type', typeof data.jobs);
+      console.log('parsedjobs', parsedJobs);
+      console.log('type', typeof parsedJobs);
+      console.log('apiData', apiData());
     } catch (error) {
       console.error('Error fetching data:', error);
       // Handle errors appropriately, e.g., display an error message
