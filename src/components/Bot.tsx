@@ -90,7 +90,7 @@ interface JobListing {
 }
 
 interface ApiResponse {
-  text: string; // JSON array as a string
+  text: JobListing[] | null ; // JSON array as a string
   chatMessageId: string;
   chatId: string;
   jobs: JobListing[] | null; // Updated property
@@ -743,10 +743,10 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
             <pre>{JSON.stringify(apiData(), null, 2)}</pre>
           </div>
         </Show> */}
-        <Show when={apiData()?.jobs}>
+        <Show when={apiData()?.text}>
           <div class="api-data-container">
             <div class="card-container">
-              <For each={apiData()?.jobs}>
+              <For each={apiData()?.text}>
                 {(job) => {
                   // Type enforcement and index access
                   return (
