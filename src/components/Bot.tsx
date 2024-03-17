@@ -743,19 +743,26 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
             <pre>{JSON.stringify(apiData(), null, 2)}</pre>
           </div>
         </Show> */}
-        <Show when={apiData()?.jobs}> 
+        <Show when={apiData()?.jobs}>
           <div class="api-data-container">
             <div class="card-container">
-              {apiData()?.jobs?.map((job: JobListing) => ( // Type enforcement 
-                <div class="job-card-wrapper"> {/* Using 'name' as a placeholder key */}
-                  <div class="job-card">
-                    <h2>{job.name}</h2>
-                    <p>Company: {job.company}</p>
-                    <p>Wage: {job.wage}</p>
-                    {/* Add job_type, details, and explanation if you want to display them */}
-                  </div>
-                </div>
-              ))}
+              <For each={apiData()?.jobs}>
+                {(job) => {
+                  // Type enforcement and index access
+                  return (
+                    <div class="job-card-wrapper">
+                      {' '}
+                      {/* Using 'name' as a placeholder key */}
+                      <div class="job-card">
+                        <h2>{job.name}</h2>
+                        <p>Company: {job.company}</p>
+                        <p>Wage: {job.wage}</p>
+                        {/* Add job_type, details, and explanation if you want to display them */}
+                      </div>
+                    </div>
+                  );
+                }}
+              </For>
             </div>
           </div>
         </Show>
