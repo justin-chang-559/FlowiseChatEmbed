@@ -117,11 +117,11 @@ async function query(data: { question: string }): Promise<ApiResponse> {
 
 export const Bot = (botProps: BotProps & { class?: string }) => {
   const [apiData, setApiData] = createSignal<ApiResponse | null>(null);
-  const [selectedChatFlow, setSelectedChatFlow] = createSignal('regular'); // 'regular' being the default 
+  const [selectedChatFlow, setSelectedChatFlow] = createSignal('a32245d2-2b55-4580-bd33-b4e046a07c84'); // 'regular' being the default
 
   const chatFlowIds = {
     regular: 'a32245d2-2b55-4580-bd33-b4e046a07c84',
-    jobs: '806cae74-1096-434b-a003-8a5779b42c4a'
+    jobs: '806cae74-1096-434b-a003-8a5779b42c4a',
   };
 
   createEffect(async () => {
@@ -316,11 +316,11 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
     }
 
     // const result = await sendMessageQuery({
-      const result = await sendMessageQuery({
-        chatflowid: selectedChatFlow(), // Use the mapping
-        apiHost: props.apiHost,
-        body,
-      });
+    const result = await sendMessageQuery({
+      chatflowid: selectedChatFlow(), // Use the mapping
+      apiHost: props.apiHost,
+      body,
+    });
 
     if (result.data) {
       const data = result.data;
@@ -781,15 +781,13 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
           >
             <Show when={messages().length === 1}>
               <div class="choice-buttons">
-                <button onClick={() => setSelectedChatFlow('regular')}>Regular Chat</button>
-                <button onClick={() => setSelectedChatFlow('jobs')}>Job Search</button>
+                <button onClick={() => setSelectedChatFlow('a32245d2-2b55-4580-bd33-b4e046a07c84')}>Regular Chat</button>
+                <button onClick={() => setSelectedChatFlow('806cae74-1096-434b-a003-8a5779b42c4a')}>Job Search</button>
               </div>
             </Show>
 
-
-
             {/* ApiData Contaner  */}
-            <Show when={apiData()?.jobs}>
+            <Show when={selectedChatFlow() == "806cae74-1096-434b-a003-8a5779b42c4a"}>
               <div class="api-data-container">
                 <div class="card-container">
                   <For each={apiData()?.jobs}>
