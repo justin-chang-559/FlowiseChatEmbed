@@ -116,9 +116,9 @@ async function query(data: { question: string }): Promise<ApiResponse> {
 }
 
 export const Bot = (botProps: BotProps & { class?: string }) => {
-  const [apiData, setApiData] = createSignal<ApiResponse | null>(null);
+  const [apiData, setApiData] = createSignal<ApiResponse | null>(null); //apicall hook
   const [selectedChatFlow, setSelectedChatFlow] = createSignal('a32245d2-2b55-4580-bd33-b4e046a07c84'); // 'regular' being the default
-
+  const [isLoadingJobs, setIsLoadingJobs] = createSignal(false); //is loading hook
   const chatFlowIds = {
     regular: 'a32245d2-2b55-4580-bd33-b4e046a07c84',
     jobs: '806cae74-1096-434b-a003-8a5779b42c4a',
@@ -126,9 +126,11 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
 
   createEffect(async () => {
     try {
+      setIsLoadingJobs(true);
       const data = await query({ question: 'software Engineer' });
       const parsedJobs = JSON.parse(data.text) as JobListing[]; // Parse the JSON
       setApiData({ ...data, jobs: parsedJobs });
+      setIsLoadingJobs(false);
       // setApiData(data); // Update state with resolved data
       console.log('parsedjobs', parsedJobs);
       console.log('type', typeof parsedJobs);
@@ -151,7 +153,7 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
   const [messages, setMessages] = createSignal<MessageType[]>(
     [
       {
-        message: 'Hello! I am G-AI, your personal assistant. Let me recommend some job opportunities. How can I help you today?',
+        message: 'Hello! I am G-AI, your personal assistant. How can I help you today?',
         // message: props.welcomeMessage ?? defaultWelcomeMessage,
         type: 'apiMessage',
       },
@@ -779,15 +781,23 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
             ref={chatContainer}
             class="overflow-y-scroll flex flex-col flex-grow min-w-full w-full px-3 pt-[70px] relative scrollable-container chatbot-chat-view scroll-smooth"
           >
-            <Show when={messages().length === 1}>
+            <Show when={messages.length >= 0}>
               <div class="choice-buttons">
                 <button onClick={() => setSelectedChatFlow('a32245d2-2b55-4580-bd33-b4e046a07c84')}>Regular Chat</button>
                 <button onClick={() => setSelectedChatFlow('806cae74-1096-434b-a003-8a5779b42c4a')}>Job Search</button>
               </div>
             </Show>
 
+
+            {/* Loading sign */}
+            <Show when={isLoadingJobs}>
+              <div class="loading-jobs-message-container">
+                Loading Opportunities...
+              </div>
+            </Show>
+            
             {/* ApiData Contaner  */}
-            <Show when={selectedChatFlow() == "806cae74-1096-434b-a003-8a5779b42c4a"}>
+            <Show when={selectedChatFlow() == '806cae74-1096-434b-a003-8a5779b42c4a'}>
               <div class="api-data-container">
                 <div class="card-container">
                   <For each={apiData()?.jobs}>
