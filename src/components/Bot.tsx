@@ -119,10 +119,7 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
   const [apiData, setApiData] = createSignal<ApiResponse | null>(null); //apicall hook
   const [selectedChatFlow, setSelectedChatFlow] = createSignal('a32245d2-2b55-4580-bd33-b4e046a07c84'); // 'regular' being the default
   const [isLoadingJobs, setIsLoadingJobs] = createSignal(false); //is loading hook
-  const chatFlowIds = {
-    regular: 'a32245d2-2b55-4580-bd33-b4e046a07c84',
-    jobs: '806cae74-1096-434b-a003-8a5779b42c4a',
-  };
+
 
   createEffect(async () => {
     try {
@@ -782,20 +779,17 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
             class="overflow-y-scroll flex flex-col flex-grow min-w-full w-full px-3 pt-[70px] relative scrollable-container chatbot-chat-view scroll-smooth"
           >
             <Show when={messages.length >= 0}>
-              <div class="choice-buttons">
-                <button onClick={() => setSelectedChatFlow('a32245d2-2b55-4580-bd33-b4e046a07c84')}>Regular Chat</button>
-                <button onClick={() => setSelectedChatFlow('806cae74-1096-434b-a003-8a5779b42c4a')}>Job Search</button>
+              <div class="choice-buttons-row">
+                <button onClick={() => setSelectedChatFlow('a32245d2-2b55-4580-bd33-b4e046a07c84')} class = "ai-setting">Regular Chat</button>
+                <button onClick={() => setSelectedChatFlow('806cae74-1096-434b-a003-8a5779b42c4a')} class = "ai-setting">Job Search</button>
               </div>
             </Show>
-
 
             {/* Loading sign */}
             <Show when={isLoadingJobs}>
-              <div class="loading-jobs-message-container">
-                Loading Opportunities...
-              </div>
+              <div class="loading-jobs-message-container">Loading Opportunities...</div>
             </Show>
-            
+
             {/* ApiData Contaner  */}
             <Show when={selectedChatFlow() == '806cae74-1096-434b-a003-8a5779b42c4a'}>
               <div class="api-data-container">
