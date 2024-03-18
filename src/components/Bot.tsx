@@ -783,7 +783,7 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
                 <button onClick={() => setSelectedChatFlow('9d890834-eb87-4909-930f-d420fa53a52a')} class="ai-setting">
                   Regular Chat
                 </button>
-                <button onClick={() => setSelectedChatFlow('806cae74-1096-434b-a003-8a5779b42c4a') } class="ai-setting">
+                <button onClick={() => setSelectedChatFlow('806cae74-1096-434b-a003-8a5779b42c4a')} class="ai-setting">
                   Job Search
                 </button>
               </div>
