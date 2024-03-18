@@ -122,12 +122,11 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
   const [isLoadingJobs, setIsLoadingJobs] = createSignal(false); //is loading hook
 
   createEffect(async () => {
+    setIsLoadingJobs(true);
     try {
-      setIsLoadingJobs(true);
       const data = await query({ question: 'software Engineer' });
       const parsedJobs = JSON.parse(data.text) as JobListing[]; // Parse the JSON
       setApiData({ ...data, jobs: parsedJobs });
-      setIsLoadingJobs(false);
       // setApiData(data); // Update state with resolved data
       console.log('parsedjobs', parsedJobs);
       console.log('type', typeof parsedJobs);
@@ -135,6 +134,9 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
     } catch (error) {
       console.error('Error fetching data:', error);
       // Handle errors appropriately, e.g., display an error message
+    }
+    finally {
+      setIsLoadingJobs(false);
     }
   });
 
