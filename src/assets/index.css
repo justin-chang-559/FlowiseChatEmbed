@@ -505,7 +505,7 @@ input {
   box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
   transition: 0.3s;
   display: flex;
-  justify-content: left;
+  flex-direction: row;
   align-items: center;
   margin-top: 10px;
   width: auto; /* Allow button to take natural width */

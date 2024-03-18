@@ -791,7 +791,7 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
             </Show>
 
             {/* Loading sign */}
-            <Show when={isLoadingJobs() && selectedChatFlow() == "806cae74-1096-434b-a003-8a5779b42c4a"}>
+            <Show when={isLoadingJobs() && selectedChatFlow() == '806cae74-1096-434b-a003-8a5779b42c4a'}>
               <div class="loading-jobs-message-container">Loading Opportunities...</div>
             </Show>
 
