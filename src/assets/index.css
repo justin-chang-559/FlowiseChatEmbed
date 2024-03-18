@@ -473,7 +473,7 @@ input {
   border-radius: 10px; /* Apply rounded edges */
   box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
   transition: 0.3s;
-  /* display: flex; */
+  display: flex; /* Use flexbox to align buttons in a row */
   justify-content: space-between;
   align-items: center;
   margin-top: 10px;
@@ -495,19 +495,9 @@ input {
 }
 
 .ai-setting{
-  animation: fadein 0.5s;
-  padding: 1rem 1.5rem 1rem 1.5rem;
+  padding: 1rem 1.5rem; /* Adjust padding as needed */
   background-color: #19b99a; /* Your desired blue color */ 
-  margin-bottom: 15px; 
-  width: 100px;
-  padding: 10px; 
   border-radius: 20px; /* Apply rounded edges */
   box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
   transition: 0.3s;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  margin-top: 10px;
-  width: auto; /* Allow button to take natural width */
-  margin: 0 5px; /* Add spacing between buttons */
 }
