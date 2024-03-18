@@ -20,6 +20,7 @@ import { cancelAudioRecording, startAudioRecording, stopAudioRecording } from '@
 import { useState, useEffect } from 'react';
 import { create, set } from 'lodash';
 import { text } from 'stream/consumers';
+import { clear } from 'console';
 export type FileEvent<T = EventTarget> = {
   target: T;
 };
@@ -117,9 +118,8 @@ async function query(data: { question: string }): Promise<ApiResponse> {
 
 export const Bot = (botProps: BotProps & { class?: string }) => {
   const [apiData, setApiData] = createSignal<ApiResponse | null>(null); //apicall hook
-  const [selectedChatFlow, setSelectedChatFlow] = createSignal('a32245d2-2b55-4580-bd33-b4e046a07c84'); // 'regular' being the default
+  const [selectedChatFlow, setSelectedChatFlow] = createSignal('9d890834-eb87-4909-930f-d420fa53a52a'); // 'regular' being the default
   const [isLoadingJobs, setIsLoadingJobs] = createSignal(false); //is loading hook
-
 
   createEffect(async () => {
     try {
@@ -780,13 +780,17 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
           >
             <Show when={messages.length >= 0}>
               <div class="choice-buttons-row">
-                <button onClick={() => setSelectedChatFlow('a32245d2-2b55-4580-bd33-b4e046a07c84')} class = "ai-setting">Regular Chat</button>
-                <button onClick={() => setSelectedChatFlow('806cae74-1096-434b-a003-8a5779b42c4a')} class = "ai-setting">Job Search</button>
+                <button onClick={() => setSelectedChatFlow('9d890834-eb87-4909-930f-d420fa53a52a')} class="ai-setting">
+                  Regular Chat
+                </button>
+                <button onClick={() => setSelectedChatFlow('806cae74-1096-434b-a003-8a5779b42c4a') } class="ai-setting">
+                  Job Search
+                </button>
               </div>
             </Show>
 
             {/* Loading sign */}
-            <Show when={isLoadingJobs}>
+            <Show when={isLoadingJobs()}>
               <div class="loading-jobs-message-container">Loading Opportunities...</div>
             </Show>
 

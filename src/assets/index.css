@@ -466,7 +466,6 @@ input {
 
 .choice-buttons-row{
   animation: fadein 0.5s;
-  padding: 1rem 1.5rem 1rem 1.5rem;
   background-color: #0c1a34; /* Your desired blue color */ 
   margin-bottom: 15px; 
   width: 100px;
@@ -474,9 +473,9 @@ input {
   border-radius: 10px; /* Apply rounded edges */
   box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
   transition: 0.3s;
-  display: flex;
+  /* display: flex; */
   justify-content: space-between;
-  align-items: center;
+  align-items: row;
   margin-top: 10px;
 
 }
