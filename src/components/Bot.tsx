@@ -117,6 +117,13 @@ async function query(data: { question: string }): Promise<ApiResponse> {
 
 export const Bot = (botProps: BotProps & { class?: string }) => {
   const [apiData, setApiData] = createSignal<ApiResponse | null>(null);
+  const [selectedChatFlow, setSelectedChatFlow] = createSignal('regular'); // 'regular' being the default 
+
+  const chatFlowIds = {
+    regular: 'a32245d2-2b55-4580-bd33-b4e046a07c84',
+    jobs: '806cae74-1096-434b-a003-8a5779b42c4a'
+  };
+
   createEffect(async () => {
     try {
       const data = await query({ question: 'software Engineer' });
@@ -308,11 +315,12 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
       setMessages((prevMessages) => [...prevMessages, { message: '', type: 'apiMessage' }]);
     }
 
-    const result = await sendMessageQuery({
-      chatflowid: props.chatflowid,
-      apiHost: props.apiHost,
-      body,
-    });
+    // const result = await sendMessageQuery({
+      const result = await sendMessageQuery({
+        chatflowid: selectedChatFlow(), // Use the mapping
+        apiHost: props.apiHost,
+        body,
+      });
 
     if (result.data) {
       const data = result.data;
@@ -368,13 +376,6 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
       handleError(errorData);
       return;
     }
-    // useEffect(() => {
-    //   const fetchData = async () => {
-    //     const data = await query({ question: 'software Engineer' });
-    //     setApiData(data); // Update state with resolved data
-    //   };
-    //   fetchData();
-    // }, []);
   };
 
   const clearChat = () => {
@@ -778,6 +779,16 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
             ref={chatContainer}
             class="overflow-y-scroll flex flex-col flex-grow min-w-full w-full px-3 pt-[70px] relative scrollable-container chatbot-chat-view scroll-smooth"
           >
+            <Show when={messages().length === 1}>
+              <div class="choice-buttons">
+                <button onClick={() => setSelectedChatFlow('regular')}>Regular Chat</button>
+                <button onClick={() => setSelectedChatFlow('jobs')}>Job Search</button>
+              </div>
+            </Show>
+
+
+
+            {/* ApiData Contaner  */}
             <Show when={apiData()?.jobs}>
               <div class="api-data-container">
                 <div class="card-container">

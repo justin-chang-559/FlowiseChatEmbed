@@ -463,3 +463,11 @@ input {
   /* Any existing styles for the card content */
   padding: 10px;
 }  
+
+.choice-buttons{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+  
+}
