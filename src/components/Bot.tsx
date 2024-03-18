@@ -134,8 +134,7 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
     } catch (error) {
       console.error('Error fetching data:', error);
       // Handle errors appropriately, e.g., display an error message
-    }
-    finally {
+    } finally {
       setIsLoadingJobs(false);
     }
   });

@@ -468,7 +468,7 @@ input {
   animation: fadein 0.5s;
   background-color: #0c1a34; /* Your desired blue color */ 
   margin-bottom: 15px; 
-  width: 100px;
+  width: 100%;
   padding: 10px; 
   border-radius: 10px; /* Apply rounded edges */
   box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
@@ -508,4 +508,6 @@ input {
   justify-content: left;
   align-items: center;
   margin-top: 10px;
+  width: auto; /* Allow button to take natural width */
+  margin: 0 5px; /* Add spacing between buttons */
 }
