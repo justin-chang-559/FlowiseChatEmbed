@@ -487,7 +487,7 @@ input {
   padding: 10px; 
   border-radius: 10px; /* Apply rounded edges */
   box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
-  outline: 2px rgba(0, 0, 0, 0.1);
+  outline: 5px rgba(0, 0, 0, 0.1);
   transition: 0.3s;
   display: flex;
   justify-content: left;
@@ -497,7 +497,7 @@ input {
 
 .ai-setting{
   padding: 1rem 1.5rem; /* Adjust padding as needed */
-  width: 200px; /* Adjust width as needed */
+  width: 180px; /* Adjust width as needed */
   background-color: #19b99a; /* Your desired blue color */ 
   border-radius: 20px; /* Apply rounded edges */
   box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
