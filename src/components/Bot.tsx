@@ -126,6 +126,7 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
     try {
       const data = await query({ question: 'software Engineer' });
       const parsedJobs = JSON.parse(data.text) as JobListing[]; // Parse the JSON
+      console.log('data.text', data.text);
       setApiData({ ...data, jobs: parsedJobs });
       // setApiData(data); // Update state with resolved data
       console.log('parsedjobs', parsedJobs);
