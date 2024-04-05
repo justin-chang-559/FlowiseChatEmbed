@@ -126,9 +126,10 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
     try {
       const data = await query({ question: 'software Engineer' });
       const parsedJobs = JSON.parse(data.text) as JobListing[]; // Parse the JSON
-      console.log('data.text', data.text);
+      // const stripped = String(data.text).replace(/^["']+|["']+$/g, ''); // Strip the brackets
+      // console.log('data.text', stripped);
       setApiData({ ...data, jobs: parsedJobs });
-      // setApiData(data); // Update state with resolved data
+      setApiData(data); // Update state with resolved data
       console.log('parsedjobs', parsedJobs);
       console.log('type', typeof parsedJobs);
       console.log('apiData', apiData());
@@ -792,12 +793,12 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
             </Show>
 
             {/* Loading sign */}
-            <Show when={isLoadingJobs() && selectedChatFlow() == '806cae74-1096-434b-a003-8a5779b42c4a'}>
+            <Show when={isLoadingJobs() && selectedChatFlow() == 'a32245d2-2b55-4580-bd33-b4e046a07c84'}>
               <div class="loading-jobs-message-container">Loading Opportunities...</div>
             </Show>
 
             {/* ApiData Contaner  */}
-            <Show when={selectedChatFlow() == '806cae74-1096-434b-a003-8a5779b42c4a'}>
+            <Show when={selectedChatFlow() == 'a32245d2-2b55-4580-bd33-b4e046a07c84'}>
               <div class="api-data-container">
                 <div class="card-container">
                   <For each={apiData()?.jobs}>
