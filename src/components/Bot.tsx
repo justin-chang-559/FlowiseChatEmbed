@@ -130,8 +130,8 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
       setApiData({ ...data, jobs: parsedJobs });
       setApiData(data); // Update state with resolved data
       console.log('parsedjobs', parsedJobs);
-      console.log('type', typeof parsedJobs);
-      console.log('apiData', apiData());
+      console.log('apidata.jobs', apiData()?.jobs);
+      // console.log('apiData', apiData());
     } catch (error) {
       console.error('Error fetching data:', error);
       // Handle errors appropriately, e.g., display an error message
