@@ -124,7 +124,7 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
   createEffect(async () => {
     setIsLoadingJobs(true);
     try {
-      const data = await query({ question: 'software Engineer' });
+      const data = await query({ question: 'graphic designer' });
       const parsedJobs = JSON.parse(data.text) as JobListing[]; // Parse the JSON
       // const stripped = String(data.text).replace(/^["']+|["']+$/g, ''); // Strip the brackets
       // console.log('data.text', stripped);
