@@ -128,7 +128,6 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
       // const stripped = String(data.text).replace(/^["']+|["']+$/g, ''); // Strip the brackets
       // console.log('data.text', stripped);
       setApiData({ ...data, jobs: parsedJobs });
-      setApiData(data); // Update state with resolved data
       console.log('parsedjobs', parsedJobs);
       console.log('apidata.jobs', apiData()?.jobs);
       // console.log('apiData', apiData());
