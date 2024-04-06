@@ -82,12 +82,11 @@ export type BotProps = {
 };
 
 interface JobListing {
-  name: string;
+  title: string;
   company: string;
   wage: string;
-  job_type: string; // Consider adding this if relevant
-  details: string;
-  explanation: string;
+  hours: string; // Consider adding this if relevant
+  additional_info: string;
 }
 
 interface ApiResponse {
@@ -809,7 +808,7 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
                           {' '}
                           {/* Using 'name' as a placeholder key */}
                           <div class="job-card">
-                            <h2>{job.name}</h2>
+                            <h2>{job.title}</h2>
                             <p>Company: {job.company}</p>
                             <p>Wage: {job.wage}</p>
                             {/* Add job_type, details, and explanation if you want to display them */}
