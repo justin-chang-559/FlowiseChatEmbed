@@ -103,7 +103,7 @@ const defaultBackgroundColor = '#0F2D52';
 const defaultTextColor = '#303235';
 
 async function query(data: { question: string }): Promise<ApiResponse> {
-  const response = await fetch('http://localhost:3000/api/v1/prediction/806cae74-1096-434b-a003-8a5779b42c4a', {
+  const response = await fetch('http://localhost:3000/api/v1/prediction/a32245d2-2b55-4580-bd33-b4e046a07c84', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
