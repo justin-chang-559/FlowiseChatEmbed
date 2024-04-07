@@ -106,8 +106,6 @@ interface JobOpportunityProps {
   job: JobListing;
 }
 
-
-
 const defaultWelcomeMessage = 'Need career assistance? Ask me anything!';
 
 const defaultBackgroundColor = '#0F2D52';
@@ -168,7 +166,6 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
     },
   ]);
 
-
   // Stuff for jobmessages
 
   const handleJobListings = (jobs: JobListing[]) => {
@@ -178,18 +175,20 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
       type: 'apiMessage', // You might want to have a specific type for job listings
       jobs,
     };
-  
+
     // Update the jobMessages state
     setJobMessages((prevMessages) => [...prevMessages, jobMessage]);
   };
 
   const updateJobMessage = (index: number, jobs: JobListing[]) => {
-    setJobMessages((prevMessages) => prevMessages.map((msg, i) => {
-      if (i === index) {
-        return { ...msg, jobs };
-      }
-      return msg;
-    }));
+    setJobMessages((prevMessages) =>
+      prevMessages.map((msg, i) => {
+        if (i === index) {
+          return { ...msg, jobs };
+        }
+        return msg;
+      }),
+    );
   };
 
   createEffect(async () => {
@@ -322,14 +321,79 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
   const promptClick = (prompt: string) => {
     handleSubmit(prompt);
   };
+  // job bubble component
+  const JobBubble = (props: { job: JobListing }) => {
+    return (
+      <div class="job-bubble">
+        <h2>{props.job.title}</h2>
+        <p>Company: {props.job.company}</p>
+        <p>Wage: {props.job.wage}</p>
+        {/* Render additional job details */}
+      </div>
+    );
+  };
 
   // Handle form submission
+  // handle job searches
+  const handleJobSearch = async (queryText: string) => {
+    setIsLoadingJobs(true);
+    try {
+      const data = await query({ question: queryText });
+      if (data.jobs && data.jobs.length > 0) {
+        handleJobListings(data.jobs);
+      } else {
+        // Handle the case where no jobs are found
+        setJobMessages([...jobMessages(), { message: 'No job listings found for your query.', type: 'apiMessage', jobs: [] }]);
+      }
+    } catch (error) {
+      console.error('Error fetching job listings:', error);
+      handleError('Failed to fetch job listings. Please try again.');
+    } finally {
+      setIsLoadingJobs(false);
+      setUserInput('');
+      scrollToBottom();
+    }
+  };
+
+  // update message
+  const updateChatWithApiResponse = (apiResponse: any) => {
+    // Example response processing
+    // Adapt this part according to your API's response structure
+  
+    // Check if the API response includes text to display
+    if (apiResponse.text) {
+      setMessages((prevMessages) => [
+        ...prevMessages,
+        {
+          message: apiResponse.text, // Display the message text from the response
+          type: 'apiMessage', // Assuming you have a specific type for messages from the bot/API
+          // Include any other relevant fields from the API response
+          sourceDocuments: apiResponse.sourceDocuments,
+          fileAnnotations: apiResponse.fileAnnotations,
+        },
+      ]);
+    } else {
+      // Handle cases where the expected fields are missing or the response is not as expected
+      console.error("API response didn't include expected 'text' field:", apiResponse);
+      // Optionally display a fallback or error message in the chat
+      setMessages((prevMessages) => [
+        ...prevMessages,
+        { message: "Sorry, I didn't understand that. Can you try rephrasing?", type: 'apiMessage' },
+      ]);
+    }
+  
+    // Ensure the chat scrolls to show the latest message
+    scrollToBottom();
+  };
+  
+// Handle form submission
   const handleSubmit = async (value: string) => {
     setUserInput(value);
 
     if (value.trim() === '') {
       const containsAudio = previews().filter((item) => item.type === 'audio').length > 0;
       if (!(previews().length >= 1 && containsAudio)) {
+        setLoading(false);
         return;
       }
     }
@@ -337,105 +401,64 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
     setLoading(true);
     scrollToBottom();
 
-    // Send user question and history to API
-    const welcomeMessage = props.welcomeMessage ?? defaultWelcomeMessage;
-    const messageList = messages().filter((msg) => msg.message !== welcomeMessage);
+    // Check if the chat flow is set to job search
+    if (selectedChatFlow() === 'a32245d2-2b55-4580-bd33-b4e046a07c84') {
+      // Handle job search input
+      handleJobSearch(value); // Make sure to implement this function to handle job search queries
+      setLoading(false); // Make sure to handle loading state correctly within handleJobSearch
+      setUserInput(''); // Clear input after processing
+    } else {
+      // Process as regular chat input if not in job search mode
 
-    const urls = previews().map((item) => {
-      return {
+      const messageList = messages().filter((msg) => msg.message !== (props.welcomeMessage ?? defaultWelcomeMessage));
+
+      const urls = previews().map((item) => ({
         data: item.data,
         type: item.type,
         name: item.name,
         mime: item.mime,
+      }));
+
+      clearPreviews();
+
+      setMessages((prevMessages) => [
+        ...prevMessages,
+        { message: value, type: 'userMessage', fileUploads: urls },
+      ]);
+
+      const body: IncomingInput = {
+        question: value,
+        history: messageList,
+        chatId: chatId(),
+        uploads: urls,
+        overrideConfig: props.chatflowConfig,
+        socketIOClientId: isChatFlowAvailableToStream() ? socketIOClientId() : undefined,
       };
-    });
 
-    clearPreviews();
-
-    setMessages((prevMessages) => {
-      const messages: MessageType[] = [...prevMessages, { message: value, type: 'userMessage', fileUploads: urls }];
-      addChatMessage(messages);
-      return messages;
-    });
-
-    const body: IncomingInput = {
-      question: value,
-      history: messageList,
-      chatId: chatId(),
-    };
-
-    if (urls && urls.length > 0) body.uploads = urls;
-
-    if (props.chatflowConfig) body.overrideConfig = props.chatflowConfig;
-
-    if (isChatFlowAvailableToStream()) {
-      body.socketIOClientId = socketIOClientId();
-    } else {
-      setMessages((prevMessages) => [...prevMessages, { message: '', type: 'apiMessage' }]);
-    }
-
-    // const result = await sendMessageQuery({
-    const result = await sendMessageQuery({
-      chatflowid: selectedChatFlow(), // Use the mapping
-      apiHost: props.apiHost,
-      body,
-    });
-
-    if (result.data) {
-      const data = result.data;
-      const question = data.question;
-      if (value === '' && question) {
-        setMessages((data) => {
-          const messages = data.map((item, i) => {
-            if (i === data.length - 2) {
-              return { ...item, message: question };
-            }
-            return item;
-          });
-          addChatMessage(messages);
-          return [...messages];
+      // Send user question and history to API
+      try {
+        const result = await sendMessageQuery({
+          chatflowid: selectedChatFlow(),
+          apiHost: props.apiHost,
+          body,
         });
-      }
-      if (urls && urls.length > 0) {
-        setMessages((data) => {
-          const messages = data.map((item, i) => {
-            if (i === data.length - 2) {
-              if (item.fileUploads) {
-                const fileUploads = item?.fileUploads.map((file) => ({
-                  type: file.type,
-                  name: file.name,
-                  mime: file.mime,
-                }));
-                return { ...item, fileUploads };
-              }
-            }
-            return item;
-          });
-          addChatMessage(messages);
-          return [...messages];
-        });
-      }
-      if (!isChatFlowAvailableToStream()) {
-        let text = '';
-        if (data.text) text = data.text;
-        else if (data.json) text = JSON.stringify(data.json, null, 2);
-        else text = JSON.stringify(data, null, 2);
 
-        updateLastMessage(text, data?.sourceDocuments, data?.fileAnnotations);
+        // Process response from API
+        // Adjust this based on how you receive and want to display the API response
+        if (result.data) {
+          updateChatWithApiResponse(result.data); // Implement this to update chat based on API response
+        }
+
+      } catch (error) {
+        console.error(error);
+        handleError('An unexpected error occurred. Please try again.');
+      } finally {
+        setLoading(false);
+        setUserInput('');
       }
-      setLoading(false);
-      setUserInput('');
-      scrollToBottom();
-    }
-    if (result.error) {
-      const error = result.error;
-      console.error(error);
-      const err: any = error;
-      const errorData = typeof err === 'string' ? err : err.response.data || `${err.response.status}: ${err.response.statusText}`;
-      handleError(errorData);
-      return;
     }
   };
+
 
   const clearChat = () => {
     try {
@@ -879,33 +902,14 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
               </div>
             </Show>
 
-            <Show when={selectedChatFlow() == 'a32245d2-2b55-4580-bd33-b4e046a07c84'}>
-              <div class="job-messages-container">
-                <For each={jobMessages()}>
-                  {(jobMessage) => (
-                    <div class="job-message">
-                      <p>{jobMessage.message}</p>
-                      <div class="card-container">
-                        <For each={jobMessage.jobs}>
-                          {(job) => (
-                            <div class="job-card-wrapper">
-                              <div class="job-card">
-                                <h2>{job.title}</h2>
-                                <p>Company: {job.company}</p>
-                                <p>Wage: {job.wage}</p>
-                                {/* Render additional job details as needed */}
-                              </div>
-                            </div>
-                          )}
-                        </For>
-                      </div>
-                    </div>
-                  )}
-                </For>
-              </div>
-            </Show>
-        
-
+            <For each={jobMessages()}>
+              {(jobMessage, index) => (
+                <div class="w-full flex items-center justify-start gap-2 px-5 py-2">
+                  <JobBubble job={jobMessage.jobs[0]} />
+                </div>
+              )}
+            </For>
+            
           </div>
           <Show when={messages().length === 1}>
             <Show when={starterPrompts().length > 0}>
