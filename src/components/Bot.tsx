@@ -191,20 +191,20 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
     );
   };
 
-  createEffect(async () => {
-    setIsLoadingJobs(true);
-    try {
-      const data = await query({ question: 'sales' }); // Assume this query fetches job listings
-      const parsedJobs = JSON.parse(data.text) as JobListing[]; // Parse the JSON to get job listings
-      handleJobListings(parsedJobs); // Handle the fetched job listings
-      console.log('parsedjobs', parsedJobs);
-    } catch (error) {
-      console.error('Error fetching job listings:', error);
-      // Consider adding an error handling mechanism here
-    } finally {
-      setIsLoadingJobs(false);
-    }
-  });
+  // createEffect(async () => {
+  //   setIsLoadingJobs(true);
+  //   try {
+  //     const data = await query({ question: 'sales' }); // Assume this query fetches job listings
+  //     const parsedJobs = JSON.parse(data.text) as JobListing[]; // Parse the JSON to get job listings
+  //     handleJobListings(parsedJobs); // Handle the fetched job listings
+  //     console.log('parsedjobs', parsedJobs);
+  //   } catch (error) {
+  //     console.error('Error fetching job listings:', error);
+  //     // Consider adding an error handling mechanism here
+  //   } finally {
+  //     setIsLoadingJobs(false);
+  //   }
+  // });
 
   const [messages, setMessages] = createSignal<MessageType[]>(
     [
@@ -326,18 +326,17 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
     return (
       <div class="job-bubble">
         <p>{props.jobMessage.message}</p>
-        <For each={props.jobMessage.jobs}>{(job) => (
-          <div class="job-details">
-            <h2>{job.title}</h2>
-            <p>Company: {job.company}</p><For each={jobMessages()}>
-              {(jobMessage) => (
-                <JobBubble jobMessage={jobMessage} />
-              )}
-            </For>
-            <p>Wage: {job.wage}</p>
-            {/* Include other job details as needed */}
-          </div>
-        )}</For>
+        <For each={props.jobMessage.jobs}>
+          {(job) => (
+            <div class="job-details">
+              <h2>{job.title}</h2>
+              <p>Company: {job.company}</p>
+              <For each={jobMessages()}>{(jobMessage) => <JobBubble jobMessage={jobMessage} />}</For>
+              <p>Wage: {job.wage}</p>
+              {/* Include other job details as needed */}
+            </div>
+          )}
+        </For>
       </div>
     );
   };
@@ -395,6 +394,12 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
   // Handle form submission
   const handleSubmit = async (value: string) => {
     setUserInput(value);
+    setMessages((prevMessages) => [
+      ...prevMessages,
+      { message: value, type: 'userMessage' } // Adjust as needed for your state structure
+    ]);
+  
+    setLoading(true);
 
     if (value.trim() === '') {
       const containsAudio = previews().filter((item) => item.type === 'audio').length > 0;
@@ -903,12 +908,7 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
               </div>
             </Show>
             {/* Render job messages */}
-            <For each={jobMessages()}>
-              {(jobMessage) => (
-                <JobBubble jobMessage={jobMessage} />
-              )}
-            </For>
-
+            <For each={jobMessages()}>{(jobMessage) => <JobBubble jobMessage={jobMessage} />}</For>
           </div>
           <Show when={messages().length === 1}>
             <Show when={starterPrompts().length > 0}>
