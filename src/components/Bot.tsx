@@ -20,7 +20,7 @@ import { cancelAudioRecording, startAudioRecording, stopAudioRecording } from '@
 import { useState, useEffect } from 'react';
 import { create, set } from 'lodash';
 import { text } from 'stream/consumers';
-import { clear } from 'console';
+import { clear, count } from 'console';
 export type FileEvent<T = EventTarget> = {
   target: T;
 };
@@ -351,6 +351,7 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
       console.log('job mssg', parsedJobs);
       if (parsedJobs && parsedJobs.length > 0) {
         handleJobListings(parsedJobs);
+        setJobMessages([...jobMessages(), { message: 'Here are the job listings:', type: 'apiMessage', jobs: parsedJobs }]);
       } else {
         // Handle the case where no jobs are found
         setJobMessages([...jobMessages(), { message: 'No job listings found for your query.', type: 'apiMessage', jobs: [] }]);
@@ -395,6 +396,7 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
 
   // Handle form submission
   const handleSubmit = async (value: string) => {
+
     setUserInput(value);
     setMessages((prevMessages) => [
       ...prevMessages,
@@ -911,6 +913,7 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
             </Show>
             {/* Render job messages */}
             <For each={jobMessages()}>{(jobMessage) => <JobBubble jobMessage={jobMessage} />}</For>
+
           </div>
           <Show when={messages().length === 1}>
             <Show when={starterPrompts().length > 0}>
