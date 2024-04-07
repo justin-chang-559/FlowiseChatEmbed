@@ -322,13 +322,22 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
     handleSubmit(prompt);
   };
   // job bubble component
-  const JobBubble = (props: { job: JobListing }) => {
+  const JobBubble = (props: { jobMessage: JobMessage }) => {
     return (
       <div class="job-bubble">
-        <h2>{props.job.title}</h2>
-        <p>Company: {props.job.company}</p>
-        <p>Wage: {props.job.wage}</p>
-        {/* Render additional job details */}
+        <p>{props.jobMessage.message}</p>
+        <For each={props.jobMessage.jobs}>{(job) => (
+          <div class="job-details">
+            <h2>{job.title}</h2>
+            <p>Company: {job.company}</p><For each={jobMessages()}>
+              {(jobMessage) => (
+                <JobBubble jobMessage={jobMessage} />
+              )}
+            </For>
+            <p>Wage: {job.wage}</p>
+            {/* Include other job details as needed */}
+          </div>
+        )}</For>
       </div>
     );
   };
@@ -893,14 +902,13 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
                 </div>
               </div>
             </Show>
-
+            {/* Render job messages */}
             <For each={jobMessages()}>
-              {(jobMessage, index) => (
-                <div class="w-full flex items-center justify-start gap-2 px-5 py-2">
-                  <JobBubble job={jobMessage.jobs[0]} />
-                </div>
+              {(jobMessage) => (
+                <JobBubble jobMessage={jobMessage} />
               )}
             </For>
+
           </div>
           <Show when={messages().length === 1}>
             <Show when={starterPrompts().length > 0}>
