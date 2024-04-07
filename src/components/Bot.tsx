@@ -349,11 +349,11 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
       const data = await query({ question: queryText });
       const parsedJobs = JSON.parse(data.text) as JobListing[];
       console.log('job mssg', parsedJobs);
-      if (data.jobs && data.jobs.length > 0) {
+      if (parsedJobs && parsedJobs.length > 0) {
         handleJobListings(parsedJobs);
       } else {
         // Handle the case where no jobs are found
-        setJobMessages([...jobMessages(), { message: 'No job listings found for your query.', type: 'apiMessage', jobs: []}]);
+        setJobMessages([...jobMessages(), { message: 'No job listings found for your query.', type: 'apiMessage', jobs: [] }]);
       }
     } catch (error) {
       console.error('Error fetching job listings:', error);
