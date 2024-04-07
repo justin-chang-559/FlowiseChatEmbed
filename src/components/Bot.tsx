@@ -48,7 +48,6 @@ type FilePreview = {
 
 type messageType = 'apiMessage' | 'userMessage' | 'usermessagewaiting' | 'loading';
 
-
 export type FileUpload = Omit<FilePreview, 'preview'>;
 
 export type MessageType = {
@@ -57,6 +56,12 @@ export type MessageType = {
   sourceDocuments?: any;
   fileAnnotations?: any;
   fileUploads?: Partial<FileUpload>[];
+};
+
+export type JobMessage = {
+  message: string;
+  type: messageType;
+  jobs: JobListing[];
 };
 
 type observerConfigType = (accessor: string | boolean | object | MessageType[]) => void;
@@ -101,15 +106,7 @@ interface JobOpportunityProps {
   job: JobListing;
 }
 
-const JobOpportunityCard = (props: JobOpportunityProps) => (
-  <div class="job-card">
-    <h2>{props.job.title}</h2>
-    <p>Company: {props.job.company}</p>
-    <p>Wage: {props.job.wage}</p>
-    <p>Hours: {props.job.hours}</p>
-    <p>{props.job.additional_info}</p>
-  </div>
-);
+
 
 const defaultWelcomeMessage = 'Need career assistance? Ask me anything!';
 
@@ -163,6 +160,53 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
   const [loading, setLoading] = createSignal(false);
   const [sourcePopupOpen, setSourcePopupOpen] = createSignal(false);
   const [sourcePopupSrc, setSourcePopupSrc] = createSignal({});
+  const [jobMessages, setJobMessages] = createSignal<JobMessage[]>([
+    {
+      message: 'Input a job title to search for opportunities.',
+      type: 'apiMessage',
+      jobs: [],
+    },
+  ]);
+
+
+  // Stuff for jobmessages
+
+  const handleJobListings = (jobs: JobListing[]) => {
+    // Create a JobMessage
+    const jobMessage: JobMessage = {
+      message: jobs.length > 0 ? 'Here are the job listings:' : 'No job listings found.',
+      type: 'apiMessage', // You might want to have a specific type for job listings
+      jobs,
+    };
+  
+    // Update the jobMessages state
+    setJobMessages((prevMessages) => [...prevMessages, jobMessage]);
+  };
+
+  const updateJobMessage = (index: number, jobs: JobListing[]) => {
+    setJobMessages((prevMessages) => prevMessages.map((msg, i) => {
+      if (i === index) {
+        return { ...msg, jobs };
+      }
+      return msg;
+    }));
+  };
+
+  createEffect(async () => {
+    setIsLoadingJobs(true);
+    try {
+      const data = await query({ question: 'sales' }); // Assume this query fetches job listings
+      const parsedJobs = JSON.parse(data.text) as JobListing[]; // Parse the JSON to get job listings
+      handleJobListings(parsedJobs); // Handle the fetched job listings
+      console.log('parsedjobs', parsedJobs);
+    } catch (error) {
+      console.error('Error fetching job listings:', error);
+      // Consider adding an error handling mechanism here
+    } finally {
+      setIsLoadingJobs(false);
+    }
+  });
+
   const [messages, setMessages] = createSignal<MessageType[]>(
     [
       {
@@ -835,39 +879,33 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
               </div>
             </Show>
 
-            <For each={[...messages()]}>
-              {(message, index) => {
-                switch (message.type) {
-                  case 'userMessage':
-                    // Assuming 'message' is of a type that includes all the necessary information
-                    // and 'props', 'chatId', etc., are accessible in this context
-                    return (
-                      <GuestBubble
-                        message={message} // Adjust based on your data structure
-                        chatflowid={props.chatflowid}
-                        chatId={chatId()}
-                        // Include any other props that GuestBubble expects
-                        // These could include styling props, callbacks, etc.
-                      />
-                    );
-                  
-                  // Handle other message types similarly
-                  case 'apiMessage':
-                    // Return corresponding component for API messages
-                    break;
-                  case 'loading':
-                    // Handle loading state, if applicable
-                    break;
-                  // Add cases for any other message types your chatbot handles
+            <Show when={selectedChatFlow() == 'a32245d2-2b55-4580-bd33-b4e046a07c84'}>
+              <div class="job-messages-container">
+                <For each={jobMessages()}>
+                  {(jobMessage) => (
+                    <div class="job-message">
+                      <p>{jobMessage.message}</p>
+                      <div class="card-container">
+                        <For each={jobMessage.jobs}>
+                          {(job) => (
+                            <div class="job-card-wrapper">
+                              <div class="job-card">
+                                <h2>{job.title}</h2>
+                                <p>Company: {job.company}</p>
+                                <p>Wage: {job.wage}</p>
+                                {/* Render additional job details as needed */}
+                              </div>
+                            </div>
+                          )}
+                        </For>
+                      </div>
+                    </div>
+                  )}
+                </For>
+              </div>
+            </Show>
+        
 
-                  default:
-                    // A default case to handle unexpected message types or as a fallback
-                    return <p>{message.message}</p>; // Adjust based on your structure
-                }
-              }}
-            </For>
-
-            
           </div>
           <Show when={messages().length === 1}>
             <Show when={starterPrompts().length > 0}>

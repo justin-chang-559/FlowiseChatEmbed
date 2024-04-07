@@ -28,6 +28,11 @@ export type MessageType = {
     fileAnnotations?: any;
     fileUploads?: Partial<FileUpload>[];
 };
+export type JobMessage = {
+    message: string;
+    type: messageType;
+    jobs: JobListing[];
+};
 type observerConfigType = (accessor: string | boolean | object | MessageType[]) => void;
 export type observersConfigType = Record<'observeUserInput' | 'observeLoading' | 'observeMessages', observerConfigType>;
 export type BotProps = {
@@ -49,6 +54,13 @@ export type BotProps = {
     isFullPage?: boolean;
     observersConfig?: observersConfigType;
 };
+interface JobListing {
+    title: string;
+    company: string;
+    wage: string;
+    hours: string;
+    additional_info: string;
+}
 export declare const Bot: (botProps: BotProps & {
     class?: string;
 }) => import("solid-js").JSX.Element;
