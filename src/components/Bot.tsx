@@ -46,7 +46,8 @@ type FilePreview = {
   type: string;
 };
 
-type messageType = 'apiMessage' | 'userMessage' | 'usermessagewaiting';
+type messageType = 'apiMessage' | 'userMessage' | 'usermessagewaiting' | 'loading';
+
 
 export type FileUpload = Omit<FilePreview, 'preview'>;
 
@@ -95,6 +96,20 @@ interface ApiResponse {
   chatId: string;
   jobs: JobListing[] | null; // Updated property
 }
+
+interface JobOpportunityProps {
+  job: JobListing;
+}
+
+const JobOpportunityCard = (props: JobOpportunityProps) => (
+  <div class="job-card">
+    <h2>{props.job.title}</h2>
+    <p>Company: {props.job.company}</p>
+    <p>Wage: {props.job.wage}</p>
+    <p>Hours: {props.job.hours}</p>
+    <p>{props.job.additional_info}</p>
+  </div>
+);
 
 const defaultWelcomeMessage = 'Need career assistance? Ask me anything!';
 
@@ -822,60 +837,37 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
 
             <For each={[...messages()]}>
               {(message, index) => {
-                return (
-                  <>
-                    {message.type === 'userMessage' && (
+                switch (message.type) {
+                  case 'userMessage':
+                    // Assuming 'message' is of a type that includes all the necessary information
+                    // and 'props', 'chatId', etc., are accessible in this context
+                    return (
                       <GuestBubble
-                        message={message}
-                        apiHost={props.apiHost}
+                        message={message} // Adjust based on your data structure
                         chatflowid={props.chatflowid}
                         chatId={chatId()}
-                        backgroundColor={props.userMessage?.backgroundColor}
-                        textColor={props.userMessage?.textColor}
-                        showAvatar={props.userMessage?.showAvatar}
-                        avatarSrc={props.userMessage?.avatarSrc}
+                        // Include any other props that GuestBubble expects
+                        // These could include styling props, callbacks, etc.
                       />
-                    )}
-                    {message.type === 'apiMessage' && (
-                      <BotBubble
-                        message={message.message}
-                        fileAnnotations={message.fileAnnotations}
-                        apiHost={props.apiHost}
-                        backgroundColor={props.botMessage?.backgroundColor}
-                        textColor={props.botMessage?.textColor}
-                        showAvatar={props.botMessage?.showAvatar}
-                        avatarSrc={props.botMessage?.avatarSrc}
-                      />
-                    )}
-                    {message.type === 'userMessage' && loading() && index() === messages().length - 1 && <LoadingBubble />}
-                    {message.type === 'apiMessage' && message.message === '' && loading() && index() === messages().length - 1 && <LoadingBubble />}
-                    {message.sourceDocuments && message.sourceDocuments.length && (
-                      <div style={{ display: 'flex', 'flex-direction': 'row', width: '100%' }}>
-                        <For each={[...removeDuplicateURL(message)]}>
-                          {(src) => {
-                            const URL = isValidURL(src.metadata.source);
-                            return (
-                              <SourceBubble
-                                pageContent={URL ? URL.pathname : src.pageContent}
-                                metadata={src.metadata}
-                                onSourceClick={() => {
-                                  if (URL) {
-                                    window.open(src.metadata.source, '_blank');
-                                  } else {
-                                    setSourcePopupSrc(src);
-                                    setSourcePopupOpen(true);
-                                  }
-                                }}
-                              />
-                            );
-                          }}
-                        </For>
-                      </div>
-                    )}
-                  </>
-                );
+                    );
+                  
+                  // Handle other message types similarly
+                  case 'apiMessage':
+                    // Return corresponding component for API messages
+                    break;
+                  case 'loading':
+                    // Handle loading state, if applicable
+                    break;
+                  // Add cases for any other message types your chatbot handles
+
+                  default:
+                    // A default case to handle unexpected message types or as a fallback
+                    return <p>{message.message}</p>; // Adjust based on your structure
+                }
               }}
             </For>
+
+            
           </div>
           <Show when={messages().length === 1}>
             <Show when={starterPrompts().length > 0}>
