@@ -359,7 +359,7 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
   const updateChatWithApiResponse = (apiResponse: any) => {
     // Example response processing
     // Adapt this part according to your API's response structure
-  
+
     // Check if the API response includes text to display
     if (apiResponse.text) {
       setMessages((prevMessages) => [
@@ -376,17 +376,14 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
       // Handle cases where the expected fields are missing or the response is not as expected
       console.error("API response didn't include expected 'text' field:", apiResponse);
       // Optionally display a fallback or error message in the chat
-      setMessages((prevMessages) => [
-        ...prevMessages,
-        { message: "Sorry, I didn't understand that. Can you try rephrasing?", type: 'apiMessage' },
-      ]);
+      setMessages((prevMessages) => [...prevMessages, { message: "Sorry, I didn't understand that. Can you try rephrasing?", type: 'apiMessage' }]);
     }
-  
+
     // Ensure the chat scrolls to show the latest message
     scrollToBottom();
   };
-  
-// Handle form submission
+
+  // Handle form submission
   const handleSubmit = async (value: string) => {
     setUserInput(value);
 
@@ -421,10 +418,7 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
 
       clearPreviews();
 
-      setMessages((prevMessages) => [
-        ...prevMessages,
-        { message: value, type: 'userMessage', fileUploads: urls },
-      ]);
+      setMessages((prevMessages) => [...prevMessages, { message: value, type: 'userMessage', fileUploads: urls }]);
 
       const body: IncomingInput = {
         question: value,
@@ -448,7 +442,6 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
         if (result.data) {
           updateChatWithApiResponse(result.data); // Implement this to update chat based on API response
         }
-
       } catch (error) {
         console.error(error);
         handleError('An unexpected error occurred. Please try again.');
@@ -458,7 +451,6 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
       }
     }
   };
-
 
   const clearChat = () => {
     try {
@@ -909,7 +901,6 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
                 </div>
               )}
             </For>
-            
           </div>
           <Show when={messages().length === 1}>
             <Show when={starterPrompts().length > 0}>
