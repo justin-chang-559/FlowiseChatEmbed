@@ -352,6 +352,7 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
       if (parsedJobs && parsedJobs.length > 0) {
         handleJobListings(parsedJobs);
         setJobMessages([...jobMessages(), { message: 'Here are the job listings:', type: 'apiMessage', jobs: parsedJobs }]);
+        console.log('jobMssges', setJobMessages);
       } else {
         // Handle the case where no jobs are found
         setJobMessages([...jobMessages(), { message: 'No job listings found for your query.', type: 'apiMessage', jobs: [] }]);
@@ -396,7 +397,6 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
 
   // Handle form submission
   const handleSubmit = async (value: string) => {
-
     setUserInput(value);
     setMessages((prevMessages) => [
       ...prevMessages,
@@ -913,7 +913,6 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
             </Show>
             {/* Render job messages */}
             <For each={jobMessages()}>{(jobMessage) => <JobBubble jobMessage={jobMessage} />}</For>
-
           </div>
           <Show when={messages().length === 1}>
             <Show when={starterPrompts().length > 0}>
