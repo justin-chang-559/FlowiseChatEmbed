@@ -285,7 +285,7 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
       <div class="job-bubble">
         <div>
           <p>{props.jobMessage.message}</p>
-        </div>
+        </div>       
         <For each={props.jobMessage.jobs}>
           {(job) => (
             <div class="job-card-wrapper">
@@ -298,6 +298,7 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
             </div>
           )}
         </For>
+        
       </div>
     );
   };
@@ -367,7 +368,7 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
   // Handle form submission
   const handleSubmit = async (value: string) => {
     setUserInput(value);
-
+  
     if (value.trim() === '') {
       const containsAudio = previews().filter((item) => item.type === 'audio').length > 0;
       if (!(previews().length >= 1 && containsAudio)) {
@@ -375,114 +376,56 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
         return;
       }
     }
-
+  
     setLoading(true);
     scrollToBottom();
-
+  
     // Check if the chat flow is set to job search
-    // if (selectedChatFlow() === 'a32245d2-2b55-4580-bd33-b4e046a07c84') {
-    //   // Job search functionality
-    //   handleJobSearch(value);
-    // } else {
+    if (selectedChatFlow() === 'a32245d2-2b55-4580-bd33-b4e046a07c84') {
+      // Job search functionality
+      handleJobSearch(value);
+    } else {
       // Regular chat functionality
       const welcomeMessage = props.welcomeMessage ?? defaultWelcomeMessage;
       const messageList = messages().filter((msg) => msg.message !== welcomeMessage);
-
-      const urls = previews().map((item) => {
-        return {
-          data: item.data,
-          type: item.type,
-          name: item.name,
-          mime: item.mime,
-        };
-      });
-
+      const urls = previews().map((item) => ({
+        data: item.data,
+        type: item.type,
+        name: item.name,
+        mime: item.mime,
+      }));
+  
       clearPreviews();
-
-      setMessages((prevMessages) => {
-        const messages: MessageType[] = [...prevMessages, { message: value, type: 'userMessage', fileUploads: urls }];
-        addChatMessage(messages);
-        return messages;
-      });
-
+      setMessages((prevMessages) => [...prevMessages, { message: value, type: 'userMessage', fileUploads: urls }]);
+      
       const body: IncomingInput = {
         question: value,
         history: messageList,
         chatId: chatId(),
+        uploads: urls,
+        overrideConfig: props.chatflowConfig,
+        socketIOClientId: isChatFlowAvailableToStream() ? socketIOClientId() : undefined,
       };
-
-      if (urls && urls.length > 0) body.uploads = urls;
-
-      if (props.chatflowConfig) body.overrideConfig = props.chatflowConfig;
-
-      if (isChatFlowAvailableToStream()) {
-        body.socketIOClientId = socketIOClientId();
-      } else {
-        setMessages((prevMessages) => [...prevMessages, { message: '', type: 'apiMessage' }]);
-      }
-
-      // const result = await sendMessageQuery({
-      const result = await sendMessageQuery({
-        chatflowid: selectedChatFlow(), // Use the mapping
-        apiHost: props.apiHost,
-        body,
-      });
-
-      if (result.data) {
-        const data = result.data;
-        const question = data.question;
-        if (value === '' && question) {
-          setMessages((data) => {
-            const messages = data.map((item, i) => {
-              if (i === data.length - 2) {
-                return { ...item, message: question };
-              }
-              return item;
-            });
-            addChatMessage(messages);
-            return [...messages];
-          });
+  
+      try {
+        const result = await sendMessageQuery({
+          chatflowid: selectedChatFlow(),
+          apiHost: props.apiHost,
+          body,
+        });
+  
+        // Process the response from the API
+        if (result.data) {
+          updateChatWithApiResponse(result.data);
         }
-        if (urls && urls.length > 0) {
-          setMessages((data) => {
-            const messages = data.map((item, i) => {
-              if (i === data.length - 2) {
-                if (item.fileUploads) {
-                  const fileUploads = item?.fileUploads.map((file) => ({
-                    type: file.type,
-                    name: file.name,
-                    mime: file.mime,
-                  }));
-                  return { ...item, fileUploads };
-                }
-              }
-              return item;
-            });
-            addChatMessage(messages);
-            return [...messages];
-          });
-        }
-        if (!isChatFlowAvailableToStream()) {
-          let text = '';
-          if (data.text) text = data.text;
-          else if (data.json) text = JSON.stringify(data.json, null, 2);
-          else text = JSON.stringify(data, null, 2);
-
-          updateLastMessage(text, data?.sourceDocuments, data?.fileAnnotations);
-        }
+      } catch (error) {
+        console.error('An unexpected error occurred:', error);
+        handleError('An unexpected error occurred. Please try again.');
+      } finally {
         setLoading(false);
         setUserInput('');
-        scrollToBottom();
       }
-      if (result.error) {
-        const error = result.error;
-        console.error(error);
-        const err: any = error;
-        const errorData = typeof err === 'string' ? err : err.response.data || `${err.response.status}: ${err.response.statusText}`;
-        handleError(errorData);
-        return;
-      }
-    // }
+    }
   };
 
   const clearChat = () => {
@@ -927,8 +870,68 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
               </div>
             </Show>
             {/* Render job messages */}
+
             <For each={jobMessages()}>{(jobMessage) => <JobBubble jobMessage={jobMessage} />}</For>
           </div>
+
+          {/* Render Messages */}
+          <For each={[...messages()]}>
+              {(message, index) => {
+                return (
+                  <>
+                    {message.type === 'userMessage' && (
+                      <GuestBubble
+                        message={message}
+                        apiHost={props.apiHost}
+                        chatflowid={props.chatflowid}
+                        chatId={chatId()}
+                        backgroundColor={props.userMessage?.backgroundColor}
+                        textColor={props.userMessage?.textColor}
+                        showAvatar={props.userMessage?.showAvatar}
+                        avatarSrc={props.userMessage?.avatarSrc}
+                      />
+                    )}
+                    {message.type === 'apiMessage' && (
+                      <BotBubble
+                        message={message.message}
+                        fileAnnotations={message.fileAnnotations}
+                        apiHost={props.apiHost}
+                        backgroundColor={props.botMessage?.backgroundColor}
+                        textColor={props.botMessage?.textColor}
+                        showAvatar={props.botMessage?.showAvatar}
+                        avatarSrc={props.botMessage?.avatarSrc}
+                      />
+                    )}
+                    {message.type === 'userMessage' && loading() && index() === messages().length - 1 && <LoadingBubble />}
+                    {message.type === 'apiMessage' && message.message === '' && loading() && index() === messages().length - 1 && <LoadingBubble />}
+                    {message.sourceDocuments && message.sourceDocuments.length && (
+                      <div style={{ display: 'flex', 'flex-direction': 'row', width: '100%' }}>
+                        <For each={[...removeDuplicateURL(message)]}>
+                          {(src) => {
+                            const URL = isValidURL(src.metadata.source);
+                            return (
+                              <SourceBubble
+                                pageContent={URL ? URL.pathname : src.pageContent}
+                                metadata={src.metadata}
+                                onSourceClick={() => {
+                                  if (URL) {
+                                    window.open(src.metadata.source, '_blank');
+                                  } else {
+                                    setSourcePopupSrc(src);
+                                    setSourcePopupOpen(true);
+                                  }
+                                }}
+                              />
+                            );
+                          }}
+                        </For>
+                      </div>
+                    )}
+                  </>
+                );
+              }}
+            </For>
+
           <Show when={messages().length === 1}>
             <Show when={starterPrompts().length > 0}>
               <div class="w-full flex flex-row flex-wrap px-5 py-[10px] gap-2">
@@ -936,6 +939,9 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
               </div>
             </Show>
           </Show>
+
+
+          
           <Show when={previews().length > 0}>
             <div class="w-full flex items-center justify-start gap-2 px-5 pt-2 border-t border-[#eeeeee]">
               <For each={[...previews()]}>
