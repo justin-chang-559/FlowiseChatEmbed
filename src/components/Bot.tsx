@@ -283,25 +283,25 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
   const JobBubble = (props: { jobMessage: JobMessage }) => {
     return (
       <Show when={selectedChatFlow() == 'a32245d2-2b55-4580-bd33-b4e046a07c84'}>
-      <div class="job-bubble">
-        <div class="job-message">
-          <p>{props.jobMessage.message}</p>
+        <div class="job-bubble">
+          <div class="job-message">
+            <p>{props.jobMessage.message}</p>
+          </div>
+          <div class="job-listings">
+            <For each={props.jobMessage.jobs}>
+              {(job) => (
+                <div class="job-card-wrapper">
+                  <div class="job-card">
+                    <h2>{job.title}</h2>
+                    <p>Company: {job.company}</p>
+                    <p>Wage: {job.wage}</p>
+                    {/* Add job_type, details, and explanation if you want to display them */}
+                  </div>
+                </div>
+              )}
+            </For>
+          </div>
         </div>
-        <div class="job-listings">
-        <For each={props.jobMessage.jobs}>
-          {(job) => (
-            <div class="job-card-wrapper">
-              <div class="job-card">
-                <h2>{job.title}</h2>
-                <p>Company: {job.company}</p>
-                <p>Wage: {job.wage}</p>
-                {/* Add job_type, details, and explanation if you want to display them */}
-              </div>
-            </div>
-          )}
-        </For>
-        </div>
-      </div>
       </Show>
     );
   };
@@ -934,14 +934,13 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
               }}
             </For>
             <Show when={messages().length === 1}>
-            <Show when={starterPrompts().length > 0}>
-              <div class="w-full flex flex-row flex-wrap px-5 py-[10px] gap-2">
-                <For each={[...starterPrompts()]}>{(key) => <StarterPromptBubble prompt={key} onPromptClick={() => promptClick(key)} />}</For>
-              </div>
+              <Show when={starterPrompts().length > 0}>
+                <div class="w-full flex flex-row flex-wrap px-5 py-[10px] gap-2">
+                  <For each={[...starterPrompts()]}>{(key) => <StarterPromptBubble prompt={key} onPromptClick={() => promptClick(key)} />}</For>
+                </div>
+              </Show>
             </Show>
-          </Show>
           </div>
-
 
           <Show when={previews().length > 0}>
             <div class="w-full flex items-center justify-start gap-2 px-5 pt-2 border-t border-[#eeeeee]">

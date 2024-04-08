@@ -522,7 +522,7 @@ input {
   display: flex;
 }
 
-.job-listing {
+.job-listings {
   display: flex; /* This enables Flexbox */
   justify-content: space-around; /* This spreads the items evenly with space around them */
 }
