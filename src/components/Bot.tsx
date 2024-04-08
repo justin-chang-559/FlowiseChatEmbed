@@ -164,44 +164,6 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
 
   // Stuff for jobmessages
 
-  // const handleJobListings = (jobs: JobListing[]) => {
-  //   // Create a JobMessage
-  //   const jobMessage: JobMessage = {
-  //     message: jobs.length > 0 ? 'Here are the job listings:' : 'No job listings found.',
-  //     type: 'apiMessage', // You might want to have a specific type for job listings
-  //     jobs,
-  //   };
-
-  //   // Update the jobMessages state
-  //   setJobMessages((prevMessages) => [...prevMessages, jobMessage]);
-  // };
-
-  // const updateJobMessage = (index: number, jobs: JobListing[]) => {
-  //   setJobMessages((prevMessages) =>
-  //     prevMessages.map((msg, i) => {
-  //       if (i === index) {
-  //         return { ...msg, jobs };
-  //       }
-  //       return msg;
-  //     }),
-  //   );
-  // };
-
-  // createEffect(async () => {
-  //   setIsLoadingJobs(true);
-  //   try {
-  //     const data = await query({ question: 'sales' }); // Assume this query fetches job listings
-  //     const parsedJobs = JSON.parse(data.text) as JobListing[]; // Parse the JSON to get job listings
-  //     handleJobListings(parsedJobs); // Handle the fetched job listings
-  //     console.log('parsedjobs', parsedJobs);
-  //   } catch (error) {
-  //     console.error('Error fetching job listings:', error);
-  //     // Consider adding an error handling mechanism here
-  //   } finally {
-  //     setIsLoadingJobs(false);
-  //   }
-  // });
-
   const [messages, setMessages] = createSignal<MessageType[]>(
     [
       {
@@ -321,18 +283,22 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
   const JobBubble = (props: { jobMessage: JobMessage }) => {
     return (
       <div class="job-bubble">
-        <p>{props.jobMessage.message}</p>
+        <div>
+          <p>{props.jobMessage.message}</p>
+        </div>       
         <For each={props.jobMessage.jobs}>
           {(job) => (
-            <div class="job-details">
-              <h2>{job.title}</h2>
-              <p>Company: {job.company}</p>
-              {/* <For each={jobMessages()}>{(jobMessage) => <JobBubble jobMessage={jobMessage} />}</For> */}
-              <p>Wage: {job.wage}</p>
-              {/* Include other job details as needed */}
+            <div class="job-card-wrapper">
+              <div class="job-card">
+                <h2>{job.title}</h2>
+                <p>Company: {job.company}</p>
+                <p>Wage: {job.wage}</p>
+                {/* Add job_type, details, and explanation if you want to display them */}
+              </div>
             </div>
           )}
         </For>
+        
       </div>
     );
   };
@@ -402,13 +368,7 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
   // Handle form submission
   const handleSubmit = async (value: string) => {
     setUserInput(value);
-    setMessages((prevMessages) => [
-      ...prevMessages,
-      { message: value, type: 'userMessage' }, // Adjust as needed for your state structure
-    ]);
-
-    setLoading(true);
-
+  
     if (value.trim() === '') {
       const containsAudio = previews().filter((item) => item.type === 'audio').length > 0;
       if (!(previews().length >= 1 && containsAudio)) {
@@ -416,32 +376,28 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
         return;
       }
     }
-
+  
     setLoading(true);
     scrollToBottom();
-
+  
     // Check if the chat flow is set to job search
     if (selectedChatFlow() === 'a32245d2-2b55-4580-bd33-b4e046a07c84') {
-      // Handle job search input
-      handleJobSearch(value); // Make sure to implement this function to handle job search queries
-      setLoading(false); // Make sure to handle loading state correctly within handleJobSearch
-      setUserInput(''); // Clear input after processing
+      // Job search functionality
+      handleJobSearch(value);
     } else {
-      // Process as regular chat input if not in job search mode
-
-      const messageList = messages().filter((msg) => msg.message !== (props.welcomeMessage ?? defaultWelcomeMessage));
-
+      // Regular chat functionality
+      const welcomeMessage = props.welcomeMessage ?? defaultWelcomeMessage;
+      const messageList = messages().filter((msg) => msg.message !== welcomeMessage);
       const urls = previews().map((item) => ({
         data: item.data,
         type: item.type,
         name: item.name,
         mime: item.mime,
       }));
-
+  
       clearPreviews();
-
       setMessages((prevMessages) => [...prevMessages, { message: value, type: 'userMessage', fileUploads: urls }]);
-
+      
       const body: IncomingInput = {
         question: value,
         history: messageList,
@@ -450,22 +406,20 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
         overrideConfig: props.chatflowConfig,
         socketIOClientId: isChatFlowAvailableToStream() ? socketIOClientId() : undefined,
       };
-
-      // Send user question and history to API
+  
       try {
         const result = await sendMessageQuery({
           chatflowid: selectedChatFlow(),
           apiHost: props.apiHost,
           body,
         });
-
-        // Process response from API
-        // Adjust this based on how you receive and want to display the API response
+  
+        // Process the response from the API
         if (result.data) {
-          updateChatWithApiResponse(result.data); // Implement this to update chat based on API response
+          updateChatWithApiResponse(result.data);
         }
       } catch (error) {
-        console.error(error);
+        console.error('An unexpected error occurred:', error);
         handleError('An unexpected error occurred. Please try again.');
       } finally {
         setLoading(false);
