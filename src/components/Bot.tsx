@@ -359,7 +359,7 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
         setJobMessages((prevMessages) => [...prevMessages, jobMessage]);
         console.log('parsedjobs after', parsedJobs);
       } else {
-        // setJobMessages((prevMessages) => [...prevMessages, { message: 'No job listings found for your query.', type: 'apiMessage', jobs: [] }]);
+        setJobMessages((prevMessages) => [...prevMessages, { message: 'No job listings found for your query.', type: 'apiMessage', jobs: [] }]);
       }
     } catch (error) {
       console.error('Error fetching job listings:', error);
