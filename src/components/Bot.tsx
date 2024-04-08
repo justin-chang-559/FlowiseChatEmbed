@@ -387,44 +387,102 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
     } else {
       // Regular chat functionality
       const welcomeMessage = props.welcomeMessage ?? defaultWelcomeMessage;
-      const messageList = messages().filter((msg) => msg.message !== welcomeMessage);
-      const urls = previews().map((item) => ({
+    const messageList = messages().filter((msg) => msg.message !== welcomeMessage);
+
+    const urls = previews().map((item) => {
+      return {
         data: item.data,
         type: item.type,
         name: item.name,
         mime: item.mime,
-      }));
-  
-      clearPreviews();
-      setMessages((prevMessages) => [...prevMessages, { message: value, type: 'userMessage', fileUploads: urls }]);
-      
-      const body: IncomingInput = {
-        question: value,
-        history: messageList,
-        chatId: chatId(),
-        uploads: urls,
-        overrideConfig: props.chatflowConfig,
-        socketIOClientId: isChatFlowAvailableToStream() ? socketIOClientId() : undefined,
       };
-  
-      try {
-        const result = await sendMessageQuery({
-          chatflowid: selectedChatFlow(),
-          apiHost: props.apiHost,
-          body,
+    });
+
+    clearPreviews();
+
+    setMessages((prevMessages) => {
+      const messages: MessageType[] = [...prevMessages, { message: value, type: 'userMessage', fileUploads: urls }];
+      addChatMessage(messages);
+      return messages;
+    });
+
+    const body: IncomingInput = {
+      question: value,
+      history: messageList,
+      chatId: chatId(),
+    };
+
+    if (urls && urls.length > 0) body.uploads = urls;
+
+    if (props.chatflowConfig) body.overrideConfig = props.chatflowConfig;
+
+    if (isChatFlowAvailableToStream()) {
+      body.socketIOClientId = socketIOClientId();
+    } else {
+      setMessages((prevMessages) => [...prevMessages, { message: '', type: 'apiMessage' }]);
+    }
+
+    // const result = await sendMessageQuery({
+    const result = await sendMessageQuery({
+      chatflowid: selectedChatFlow(), // Use the mapping
+      apiHost: props.apiHost,
+      body,
+    });
+
+    if (result.data) {
+      const data = result.data;
+      const question = data.question;
+      if (value === '' && question) {
+        setMessages((data) => {
+          const messages = data.map((item, i) => {
+            if (i === data.length - 2) {
+              return { ...item, message: question };
+            }
+            return item;
+          });
+          addChatMessage(messages);
+          return [...messages];
         });
-  
-        // Process the response from the API
-        if (result.data) {
-          updateChatWithApiResponse(result.data);
-        }
-      } catch (error) {
-        console.error('An unexpected error occurred:', error);
-        handleError('An unexpected error occurred. Please try again.');
-      } finally {
-        setLoading(false);
-        setUserInput('');
       }
+      if (urls && urls.length > 0) {
+        setMessages((data) => {
+          const messages = data.map((item, i) => {
+            if (i === data.length - 2) {
+              if (item.fileUploads) {
+                const fileUploads = item?.fileUploads.map((file) => ({
+                  type: file.type,
+                  name: file.name,
+                  mime: file.mime,
+                }));
+                return { ...item, fileUploads };
+              }
+            }
+            return item;
+          });
+          addChatMessage(messages);
+          return [...messages];
+        });
+      }
+      if (!isChatFlowAvailableToStream()) {
+        let text = '';
+        if (data.text) text = data.text;
+        else if (data.json) text = JSON.stringify(data.json, null, 2);
+        else text = JSON.stringify(data, null, 2);
+
+        updateLastMessage(text, data?.sourceDocuments, data?.fileAnnotations);
+      }
+      setLoading(false);
+      setUserInput('');
+      scrollToBottom();
+    }
+    if (result.error) {
+      const error = result.error;
+      console.error(error);
+      const err: any = error;
+      const errorData = typeof err === 'string' ? err : err.response.data || `${err.response.status}: ${err.response.statusText}`;
+      handleError(errorData);
+      return;
+    }
     }
   };
 
