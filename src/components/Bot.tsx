@@ -283,10 +283,10 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
   const JobBubble = (props: { jobMessage: JobMessage }) => {
     return (
       <Show when={selectedChatFlow() == 'a32245d2-2b55-4580-bd33-b4e046a07c84'}>
-        <div class="job-bubble">
-          <div class="job-message">
+        <div class="job-message">
             <p>{props.jobMessage.message}</p>
           </div>
+        <div class="job-bubble">
           <div class="job-listings">
             <For each={props.jobMessage.jobs}>
               {(job) => (
@@ -347,16 +347,16 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
 
     // Check if the API response includes text to display
     if (apiResponse.text) {
-      setMessages((prevMessages) => [
-        ...prevMessages,
-        {
-          message: apiResponse.text, // Display the message text from the response
-          type: 'apiMessage', // Assuming you have a specific type for messages from the bot/API
-          // Include any other relevant fields from the API response
-          sourceDocuments: apiResponse.sourceDocuments,
-          fileAnnotations: apiResponse.fileAnnotations,
-        },
-      ]);
+      // setMessages((prevMessages) => [
+      //   ...prevMessages,
+      //   {
+      //     message: apiResponse.text, // Display the message text from the response
+      //     type: 'apiMessage', // Assuming you have a specific type for messages from the bot/API
+      //     // Include any other relevant fields from the API response
+      //     sourceDocuments: apiResponse.sourceDocuments,
+      //     fileAnnotations: apiResponse.fileAnnotations,
+      //   },
+      // ]);
     } else {
       // Handle cases where the expected fields are missing or the response is not as expected
       console.error("API response didn't include expected 'text' field:", apiResponse);
