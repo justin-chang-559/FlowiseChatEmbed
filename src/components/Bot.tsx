@@ -102,9 +102,7 @@ interface ApiResponse {
   jobs: JobListing[] | null; // Updated property
 }
 
-interface JobOpportunityProps {
-  job: JobListing;
-}
+
 
 const defaultWelcomeMessage = 'Need career assistance? Ask me anything!';
 
@@ -168,28 +166,28 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
 
   // Stuff for jobmessages
 
-  const handleJobListings = (jobs: JobListing[]) => {
-    // Create a JobMessage
-    const jobMessage: JobMessage = {
-      message: jobs.length > 0 ? 'Here are the job listings:' : 'No job listings found.',
-      type: 'apiMessage', // You might want to have a specific type for job listings
-      jobs,
-    };
+  // const handleJobListings = (jobs: JobListing[]) => {
+  //   // Create a JobMessage
+  //   const jobMessage: JobMessage = {
+  //     message: jobs.length > 0 ? 'Here are the job listings:' : 'No job listings found.',
+  //     type: 'apiMessage', // You might want to have a specific type for job listings
+  //     jobs,
+  //   };
 
-    // Update the jobMessages state
-    setJobMessages((prevMessages) => [...prevMessages, jobMessage]);
-  };
+  //   // Update the jobMessages state
+  //   setJobMessages((prevMessages) => [...prevMessages, jobMessage]);
+  // };
 
-  const updateJobMessage = (index: number, jobs: JobListing[]) => {
-    setJobMessages((prevMessages) =>
-      prevMessages.map((msg, i) => {
-        if (i === index) {
-          return { ...msg, jobs };
-        }
-        return msg;
-      }),
-    );
-  };
+  // const updateJobMessage = (index: number, jobs: JobListing[]) => {
+  //   setJobMessages((prevMessages) =>
+  //     prevMessages.map((msg, i) => {
+  //       if (i === index) {
+  //         return { ...msg, jobs };
+  //       }
+  //       return msg;
+  //     }),
+  //   );
+  // };
 
   // createEffect(async () => {
   //   setIsLoadingJobs(true);
@@ -349,18 +347,20 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
       // Fetch job listings based on the query
       const data = await query({ question: queryText });
       const parsedJobs = JSON.parse(data.text) as JobListing[]; // Parse the JSON response
-  
+      console.log('parsedjobs', parsedJobs);
+      const message = parsedJobs.length > 0 ? 'Here are the job listings:' : 'No job listings found.';
+      // Create a JobMessage
+      const jobMessage: JobMessage = {
+        message,
+        type: 'apiMessage',
+        jobs: parsedJobs,
+      };
       // Update the job messages state with the new job listings or a message indicating no jobs were found
       if (parsedJobs && parsedJobs.length > 0) {
-        setJobMessages(prevMessages => [
-          ...prevMessages, 
-          { message: 'Here are the job listings:', type: 'apiMessage', jobs: parsedJobs }
-        ]);
+        setJobMessages((prevMessages) => [...prevMessages, jobMessage]);
+
       } else {
-        setJobMessages(prevMessages => [
-          ...prevMessages, 
-          { message: 'No job listings found for your query.', type: 'apiMessage', jobs: [] }
-        ]);
+        setJobMessages((prevMessages) => [...prevMessages, { message: 'No job listings found for your query.', type: 'apiMessage', jobs: [] }]);
       }
     } catch (error) {
       console.error('Error fetching job listings:', error);
@@ -371,7 +371,6 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
       scrollToBottom(); // Scroll to show the latest message or job listings
     }
   };
-  
 
   // update message
   const updateChatWithApiResponse = (apiResponse: any) => {
