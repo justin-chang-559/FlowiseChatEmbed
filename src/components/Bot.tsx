@@ -102,8 +102,6 @@ interface ApiResponse {
   jobs: JobListing[] | null; // Updated property
 }
 
-
-
 const defaultWelcomeMessage = 'Need career assistance? Ask me anything!';
 
 const defaultBackgroundColor = '#0F2D52';
@@ -329,7 +327,7 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
             <div class="job-details">
               <h2>{job.title}</h2>
               <p>Company: {job.company}</p>
-              <For each={jobMessages()}>{(jobMessage) => <JobBubble jobMessage={jobMessage} />}</For>
+              {/* <For each={jobMessages()}>{(jobMessage) => <JobBubble jobMessage={jobMessage} />}</For> */}
               <p>Wage: {job.wage}</p>
               {/* Include other job details as needed */}
             </div>
@@ -341,13 +339,14 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
 
   // Handle form submission
   // handle job searches
+
   const handleJobSearch = async (queryText: string) => {
     setIsLoadingJobs(true); // Start loading indicator
     try {
       // Fetch job listings based on the query
       const data = await query({ question: queryText });
       const parsedJobs = JSON.parse(data.text) as JobListing[]; // Parse the JSON response
-      console.log('parsedjobs', parsedJobs);
+      console.log('parsedjobs before', parsedJobs);
       const message = parsedJobs.length > 0 ? 'Here are the job listings:' : 'No job listings found.';
       // Create a JobMessage
       const jobMessage: JobMessage = {
@@ -358,9 +357,9 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
       // Update the job messages state with the new job listings or a message indicating no jobs were found
       if (parsedJobs && parsedJobs.length > 0) {
         setJobMessages((prevMessages) => [...prevMessages, jobMessage]);
-
+        console.log('parsedjobs after', parsedJobs);
       } else {
-        setJobMessages((prevMessages) => [...prevMessages, { message: 'No job listings found for your query.', type: 'apiMessage', jobs: [] }]);
+        // setJobMessages((prevMessages) => [...prevMessages, { message: 'No job listings found for your query.', type: 'apiMessage', jobs: [] }]);
       }
     } catch (error) {
       console.error('Error fetching job listings:', error);
