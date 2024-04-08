@@ -344,28 +344,34 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
   // Handle form submission
   // handle job searches
   const handleJobSearch = async (queryText: string) => {
-    setIsLoadingJobs(true);
+    setIsLoadingJobs(true); // Start loading indicator
     try {
+      // Fetch job listings based on the query
       const data = await query({ question: queryText });
-      const parsedJobs = JSON.parse(data.text) as JobListing[];
-      console.log('job mssg', parsedJobs);
+      const parsedJobs = JSON.parse(data.text) as JobListing[]; // Parse the JSON response
+  
+      // Update the job messages state with the new job listings or a message indicating no jobs were found
       if (parsedJobs && parsedJobs.length > 0) {
-        handleJobListings(parsedJobs);
-        setJobMessages([...jobMessages(), { message: 'Here are the job listings:', type: 'apiMessage', jobs: parsedJobs }]);
-        console.log('jobMssges', setJobMessages);
+        setJobMessages(prevMessages => [
+          ...prevMessages, 
+          { message: 'Here are the job listings:', type: 'apiMessage', jobs: parsedJobs }
+        ]);
       } else {
-        // Handle the case where no jobs are found
-        setJobMessages([...jobMessages(), { message: 'No job listings found for your query.', type: 'apiMessage', jobs: [] }]);
+        setJobMessages(prevMessages => [
+          ...prevMessages, 
+          { message: 'No job listings found for your query.', type: 'apiMessage', jobs: [] }
+        ]);
       }
     } catch (error) {
       console.error('Error fetching job listings:', error);
       handleError('Failed to fetch job listings. Please try again.');
     } finally {
-      setIsLoadingJobs(false);
-      setUserInput('');
-      scrollToBottom();
+      setIsLoadingJobs(false); // Stop loading indicator
+      setUserInput(''); // Clear user input
+      scrollToBottom(); // Scroll to show the latest message or job listings
     }
   };
+  
 
   // update message
   const updateChatWithApiResponse = (apiResponse: any) => {
