@@ -282,10 +282,12 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
   // job bubble component
   const JobBubble = (props: { jobMessage: JobMessage }) => {
     return (
+      <Show when={selectedChatFlow() == 'a32245d2-2b55-4580-bd33-b4e046a07c84'}>
       <div class="job-bubble">
-        <div>
+        <div class="job-message">
           <p>{props.jobMessage.message}</p>
         </div>
+        <div class="job-listings">
         <For each={props.jobMessage.jobs}>
           {(job) => (
             <div class="job-card-wrapper">
@@ -298,7 +300,9 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
             </div>
           )}
         </For>
+        </div>
       </div>
+      </Show>
     );
   };
 
@@ -874,70 +878,70 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
 
             {/* REgular messages */}
             <For each={[...messages()]}>
-            {(message, index) => {
-              return (
-                <>
-                  {message.type === 'userMessage' && (
-                    <GuestBubble
-                      message={message}
-                      apiHost={props.apiHost}
-                      chatflowid={props.chatflowid}
-                      chatId={chatId()}
-                      backgroundColor={props.userMessage?.backgroundColor}
-                      textColor={props.userMessage?.textColor}
-                      showAvatar={props.userMessage?.showAvatar}
-                      avatarSrc={props.userMessage?.avatarSrc}
-                    />
-                  )}
-                  {message.type === 'apiMessage' && (
-                    <BotBubble
-                      message={message.message}
-                      fileAnnotations={message.fileAnnotations}
-                      apiHost={props.apiHost}
-                      backgroundColor={props.botMessage?.backgroundColor}
-                      textColor={props.botMessage?.textColor}
-                      showAvatar={props.botMessage?.showAvatar}
-                      avatarSrc={props.botMessage?.avatarSrc}
-                    />
-                  )}
-                  {message.type === 'userMessage' && loading() && index() === messages().length - 1 && <LoadingBubble />}
-                  {message.type === 'apiMessage' && message.message === '' && loading() && index() === messages().length - 1 && <LoadingBubble />}
-                  {message.sourceDocuments && message.sourceDocuments.length && (
-                    <div style={{ display: 'flex', 'flex-direction': 'row', width: '100%' }}>
-                      <For each={[...removeDuplicateURL(message)]}>
-                        {(src) => {
-                          const URL = isValidURL(src.metadata.source);
-                          return (
-                            <SourceBubble
-                              pageContent={URL ? URL.pathname : src.pageContent}
-                              metadata={src.metadata}
-                              onSourceClick={() => {
-                                if (URL) {
-                                  window.open(src.metadata.source, '_blank');
-                                } else {
-                                  setSourcePopupSrc(src);
-                                  setSourcePopupOpen(true);
-                                }
-                              }}
-                            />
-                          );
-                        }}
-                      </For>
-                    </div>
-                  )}
-                </>
-              );
-            }}
-          </For>
-          </div>
-    
-          <Show when={messages().length === 1}>
+              {(message, index) => {
+                return (
+                  <>
+                    {message.type === 'userMessage' && (
+                      <GuestBubble
+                        message={message}
+                        apiHost={props.apiHost}
+                        chatflowid={props.chatflowid}
+                        chatId={chatId()}
+                        backgroundColor={props.userMessage?.backgroundColor}
+                        textColor={props.userMessage?.textColor}
+                        showAvatar={props.userMessage?.showAvatar}
+                        avatarSrc={props.userMessage?.avatarSrc}
+                      />
+                    )}
+                    {message.type === 'apiMessage' && (
+                      <BotBubble
+                        message={message.message}
+                        fileAnnotations={message.fileAnnotations}
+                        apiHost={props.apiHost}
+                        backgroundColor={props.botMessage?.backgroundColor}
+                        textColor={props.botMessage?.textColor}
+                        showAvatar={props.botMessage?.showAvatar}
+                        avatarSrc={props.botMessage?.avatarSrc}
+                      />
+                    )}
+                    {message.type === 'userMessage' && loading() && index() === messages().length - 1 && <LoadingBubble />}
+                    {message.type === 'apiMessage' && message.message === '' && loading() && index() === messages().length - 1 && <LoadingBubble />}
+                    {message.sourceDocuments && message.sourceDocuments.length && (
+                      <div style={{ display: 'flex', 'flex-direction': 'row', width: '100%' }}>
+                        <For each={[...removeDuplicateURL(message)]}>
+                          {(src) => {
+                            const URL = isValidURL(src.metadata.source);
+                            return (
+                              <SourceBubble
+                                pageContent={URL ? URL.pathname : src.pageContent}
+                                metadata={src.metadata}
+                                onSourceClick={() => {
+                                  if (URL) {
+                                    window.open(src.metadata.source, '_blank');
+                                  } else {
+                                    setSourcePopupSrc(src);
+                                    setSourcePopupOpen(true);
+                                  }
+                                }}
+                              />
+                            );
+                          }}
+                        </For>
+                      </div>
+                    )}
+                  </>
+                );
+              }}
+            </For>
+            <Show when={messages().length === 1}>
             <Show when={starterPrompts().length > 0}>
               <div class="w-full flex flex-row flex-wrap px-5 py-[10px] gap-2">
                 <For each={[...starterPrompts()]}>{(key) => <StarterPromptBubble prompt={key} onPromptClick={() => promptClick(key)} />}</For>
               </div>
             </Show>
           </Show>
+          </div>
+
 
           <Show when={previews().length > 0}>
             <div class="w-full flex items-center justify-start gap-2 px-5 pt-2 border-t border-[#eeeeee]">
