@@ -283,12 +283,12 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
   const JobBubble = (props: { jobMessage: JobMessage }) => {
     return (
       <Show when={selectedChatFlow() == 'a32245d2-2b55-4580-bd33-b4e046a07c84'}>
-        <div class='job-bubble'>
+        <div class="job-bubble">
           <div class="job-message">
-          <p>{props.jobMessage.message}</p>
+            <p>{props.jobMessage.message}</p>
+          </div>
         </div>
-        </div>
-        
+
         <Show when={props.jobMessage.jobs.length > 0}>
           <div class="job-bubble">
             <div class="job-listings">
@@ -354,16 +354,16 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
 
     // Check if the API response includes text to display
     if (apiResponse.text) {
-      setMessages((prevMessages) => [
-        ...prevMessages,
-        {
-          message: apiResponse.text, // Display the message text from the response
-          type: 'apiMessage', // Assuming you have a specific type for messages from the bot/API
-          // Include any other relevant fields from the API response
-          sourceDocuments: apiResponse.sourceDocuments,
-          fileAnnotations: apiResponse.fileAnnotations,
-        },
-      ]);
+      // setMessages((prevMessages) => [
+      //   ...prevMessages,
+      //   {
+      //     message: apiResponse.text, // Display the message text from the response
+      //     type: 'apiMessage', // Assuming you have a specific type for messages from the bot/API
+      //     // Include any other relevant fields from the API response
+      //     sourceDocuments: apiResponse.sourceDocuments,
+      //     fileAnnotations: apiResponse.fileAnnotations,
+      //   },
+      // ]);
     } else {
       // Handle cases where the expected fields are missing or the response is not as expected
       console.error("API response didn't include expected 'text' field:", apiResponse);
@@ -885,62 +885,62 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
 
             {/* REgular messages */}
             <Show when={messages().length === 1 && selectedChatFlow() == '9d890834-eb87-4909-930f-d420fa53a52a'}>
-            <For each={[...messages()]}>
-              {(message, index) => {
-                return (
-                  <>
-                    {message.type === 'userMessage' && (
-                      <GuestBubble
-                        message={message}
-                        apiHost={props.apiHost}
-                        chatflowid={props.chatflowid}
-                        chatId={chatId()}
-                        backgroundColor={props.userMessage?.backgroundColor}
-                        textColor={props.userMessage?.textColor}
-                        showAvatar={props.userMessage?.showAvatar}
-                        avatarSrc={props.userMessage?.avatarSrc}
-                      />
-                    )}
-                    {message.type === 'apiMessage' && (
-                      <BotBubble
-                        message={message.message}
-                        fileAnnotations={message.fileAnnotations}
-                        apiHost={props.apiHost}
-                        backgroundColor={props.botMessage?.backgroundColor}
-                        textColor={props.botMessage?.textColor}
-                        showAvatar={props.botMessage?.showAvatar}
-                        avatarSrc={props.botMessage?.avatarSrc}
-                      />
-                    )}
-                    {message.type === 'userMessage' && loading() && index() === messages().length - 1 && <LoadingBubble />}
-                    {message.type === 'apiMessage' && message.message === '' && loading() && index() === messages().length - 1 && <LoadingBubble />}
-                    {message.sourceDocuments && message.sourceDocuments.length && (
-                      <div style={{ display: 'flex', 'flex-direction': 'row', width: '100%' }}>
-                        <For each={[...removeDuplicateURL(message)]}>
-                          {(src) => {
-                            const URL = isValidURL(src.metadata.source);
-                            return (
-                              <SourceBubble
-                                pageContent={URL ? URL.pathname : src.pageContent}
-                                metadata={src.metadata}
-                                onSourceClick={() => {
-                                  if (URL) {
-                                    window.open(src.metadata.source, '_blank');
-                                  } else {
-                                    setSourcePopupSrc(src);
-                                    setSourcePopupOpen(true);
-                                  }
-                                }}
-                              />
-                            );
-                          }}
-                        </For>
-                      </div>
-                    )}
-                  </>
-                );
-              }}
-            </For>
+              <For each={[...messages()]}>
+                {(message, index) => {
+                  return (
+                    <>
+                      {message.type === 'userMessage' && (
+                        <GuestBubble
+                          message={message}
+                          apiHost={props.apiHost}
+                          chatflowid={props.chatflowid}
+                          chatId={chatId()}
+                          backgroundColor={props.userMessage?.backgroundColor}
+                          textColor={props.userMessage?.textColor}
+                          showAvatar={props.userMessage?.showAvatar}
+                          avatarSrc={props.userMessage?.avatarSrc}
+                        />
+                      )}
+                      {message.type === 'apiMessage' && (
+                        <BotBubble
+                          message={message.message}
+                          fileAnnotations={message.fileAnnotations}
+                          apiHost={props.apiHost}
+                          backgroundColor={props.botMessage?.backgroundColor}
+                          textColor={props.botMessage?.textColor}
+                          showAvatar={props.botMessage?.showAvatar}
+                          avatarSrc={props.botMessage?.avatarSrc}
+                        />
+                      )}
+                      {message.type === 'userMessage' && loading() && index() === messages().length - 1 && <LoadingBubble />}
+                      {message.type === 'apiMessage' && message.message === '' && loading() && index() === messages().length - 1 && <LoadingBubble />}
+                      {message.sourceDocuments && message.sourceDocuments.length && (
+                        <div style={{ display: 'flex', 'flex-direction': 'row', width: '100%' }}>
+                          <For each={[...removeDuplicateURL(message)]}>
+                            {(src) => {
+                              const URL = isValidURL(src.metadata.source);
+                              return (
+                                <SourceBubble
+                                  pageContent={URL ? URL.pathname : src.pageContent}
+                                  metadata={src.metadata}
+                                  onSourceClick={() => {
+                                    if (URL) {
+                                      window.open(src.metadata.source, '_blank');
+                                    } else {
+                                      setSourcePopupSrc(src);
+                                      setSourcePopupOpen(true);
+                                    }
+                                  }}
+                                />
+                              );
+                            }}
+                          </For>
+                        </div>
+                      )}
+                    </>
+                  );
+                }}
+              </For>
             </Show>
 
             <Show when={messages().length === 1 && selectedChatFlow() == '9d890834-eb87-4909-930f-d420fa53a52a'}>
