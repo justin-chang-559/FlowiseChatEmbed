@@ -287,22 +287,22 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
           <p>{props.jobMessage.message}</p>
         </div>
         <Show when={props.jobMessage.jobs.length > 0}>
-        <div class="job-bubble">
-          <div class="job-listings">
-            <For each={props.jobMessage.jobs}>
-              {(job) => (
-                <div class="job-card-wrapper">
-                  <div class="job-card">
-                    <h2>{job.title}</h2>
-                    <p>Company: {job.company}</p>
-                    <p>Wage: {job.wage}</p>
-                    {/* Add job_type, details, and explanation if you want to display them */}
+          <div class="job-bubble">
+            <div class="job-listings">
+              <For each={props.jobMessage.jobs}>
+                {(job) => (
+                  <div class="job-card-wrapper">
+                    <div class="job-card">
+                      <h2>{job.title}</h2>
+                      <p>Company: {job.company}</p>
+                      <p>Wage: {job.wage}</p>
+                      {/* Add job_type, details, and explanation if you want to display them */}
+                    </div>
                   </div>
-                </div>
-              )}
-            </For>
+                )}
+              </For>
+            </div>
           </div>
-        </div>
         </Show>
       </Show>
     );
@@ -328,17 +328,16 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
       // Update the job messages state with the new job listings or a message indicating no jobs were found
       if (parsedJobs && parsedJobs.length > 0) {
         setJobMessages((prevMessages) => [...prevMessages, jobMessage]);
-        
+
         console.log('parsedjobs after', parsedJobs);
       } else {
         setJobMessages((prevMessages) => [...prevMessages, { message: 'No job listings found for your query.', type: 'apiMessage', jobs: [] }]);
-
       }
     } catch (error) {
       console.error('Error fetching job listings:', error);
       handleError('Failed to fetch job listings. Please try again.');
     } finally {
-      setLoading(false);
+      // setLoading(false);
       setIsLoadingJobs(false); // Stop loading indicator
       setUserInput(''); // Clear user input
       scrollToBottom(); // Scroll to show the latest message or job listings
