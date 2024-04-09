@@ -284,8 +284,9 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
     return (
       <Show when={selectedChatFlow() == 'a32245d2-2b55-4580-bd33-b4e046a07c84'}>
         <div class="job-message">
-            <p>{props.jobMessage.message}</p>
-          </div>
+          <p>{props.jobMessage.message}</p>
+        </div>
+        <Show when={props.jobMessage.jobs.length > 0}>
         <div class="job-bubble">
           <div class="job-listings">
             <For each={props.jobMessage.jobs}>
@@ -302,6 +303,7 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
             </For>
           </div>
         </div>
+        </Show>
       </Show>
     );
   };
@@ -316,7 +318,7 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
       const data = await query({ question: queryText });
       const parsedJobs = JSON.parse(data.text) as JobListing[]; // Parse the JSON response
       console.log('parsedjobs before', parsedJobs);
-      const message = parsedJobs.length > 0 ? 'Here are the job listings:' : 'No job listings found.';
+      const message = parsedJobs.length > 0 ? `Here are the job listings related to: ${queryText}` : 'No job listings found.';
       // Create a JobMessage
       const jobMessage: JobMessage = {
         message,
@@ -326,14 +328,17 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
       // Update the job messages state with the new job listings or a message indicating no jobs were found
       if (parsedJobs && parsedJobs.length > 0) {
         setJobMessages((prevMessages) => [...prevMessages, jobMessage]);
+        
         console.log('parsedjobs after', parsedJobs);
       } else {
         setJobMessages((prevMessages) => [...prevMessages, { message: 'No job listings found for your query.', type: 'apiMessage', jobs: [] }]);
+
       }
     } catch (error) {
       console.error('Error fetching job listings:', error);
       handleError('Failed to fetch job listings. Please try again.');
     } finally {
+      setLoading(false);
       setIsLoadingJobs(false); // Stop loading indicator
       setUserInput(''); // Clear user input
       scrollToBottom(); // Scroll to show the latest message or job listings
