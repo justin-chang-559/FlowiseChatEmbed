@@ -340,7 +340,7 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
       console.error('Error fetching job listings:', error);
       handleError('Failed to fetch job listings. Please try again.');
     } finally {
-      // setLoading(false);
+      setLoading(false);
       setIsLoadingJobs(false); // Stop loading indicator
       setUserInput(''); // Clear user input
       scrollToBottom(); // Scroll to show the latest message or job listings
@@ -354,16 +354,16 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
 
     // Check if the API response includes text to display
     if (apiResponse.text) {
-      setMessages((prevMessages) => [
-        ...prevMessages,
-        {
-          message: apiResponse.text, // Display the message text from the response
-          type: 'apiMessage', // Assuming you have a specific type for messages from the bot/API
-          // Include any other relevant fields from the API response
-          sourceDocuments: apiResponse.sourceDocuments,
-          fileAnnotations: apiResponse.fileAnnotations,
-        },
-      ]);
+      // setMessages((prevMessages) => [
+      //   ...prevMessages,
+      //   {
+      //     message: apiResponse.text, // Display the message text from the response
+      //     type: 'apiMessage', // Assuming you have a specific type for messages from the bot/API
+      //     // Include any other relevant fields from the API response
+      //     sourceDocuments: apiResponse.sourceDocuments,
+      //     fileAnnotations: apiResponse.fileAnnotations,
+      //   },
+      // ]);
     } else {
       // Handle cases where the expected fields are missing or the response is not as expected
       console.error("API response didn't include expected 'text' field:", apiResponse);

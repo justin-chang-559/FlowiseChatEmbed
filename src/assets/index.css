@@ -504,13 +504,13 @@ input {
 .choice-buttons-row,
 .loading-jobs-message-container {
   justify-content: space-between;
-  flex: auto;
   gap: 10px;
 }
 
 .ai-setting {
   cursor: pointer;
   transition: background-color 0.3s ease;
+  flex: auto;
 }
 
 .ai-setting:hover {
