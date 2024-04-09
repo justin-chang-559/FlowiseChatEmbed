@@ -354,16 +354,16 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
 
     // Check if the API response includes text to display
     if (apiResponse.text) {
-      // setMessages((prevMessages) => [
-      //   ...prevMessages,
-      //   {
-      //     message: apiResponse.text, // Display the message text from the response
-      //     type: 'apiMessage', // Assuming you have a specific type for messages from the bot/API
-      //     // Include any other relevant fields from the API response
-      //     sourceDocuments: apiResponse.sourceDocuments,
-      //     fileAnnotations: apiResponse.fileAnnotations,
-      //   },
-      // ]);
+      setMessages((prevMessages) => [
+        ...prevMessages,
+        {
+          message: apiResponse.text, // Display the message text from the response
+          type: 'apiMessage', // Assuming you have a specific type for messages from the bot/API
+          // Include any other relevant fields from the API response
+          sourceDocuments: apiResponse.sourceDocuments,
+          fileAnnotations: apiResponse.fileAnnotations,
+        },
+      ]);
     } else {
       // Handle cases where the expected fields are missing or the response is not as expected
       console.error("API response didn't include expected 'text' field:", apiResponse);
@@ -884,7 +884,7 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
             <For each={jobMessages()}>{(jobMessage) => <JobBubble jobMessage={jobMessage} />}</For>
 
             {/* REgular messages */}
-            <Show when={messages().length === 1}>
+            <Show when={messages().length === 1 && selectedChatFlow() == '9d890834-eb87-4909-930f-d420fa53a52a'}>
               <For each={[...messages()]}>
                 {(message, index) => {
                   return (
@@ -943,7 +943,7 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
               </For>
             </Show>
 
-            <Show when={messages().length === 1}>
+            <Show when={messages().length === 1 && selectedChatFlow() == '9d890834-eb87-4909-930f-d420fa53a52a'}>
               <Show when={starterPrompts().length > 0}>
                 <div class="w-full flex flex-row flex-wrap px-5 py-[10px] gap-2">
                   <For each={[...starterPrompts()]}>{(key) => <StarterPromptBubble prompt={key} onPromptClick={() => promptClick(key)} />}</For>
