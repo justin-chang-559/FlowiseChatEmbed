@@ -884,7 +884,7 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
             <For each={jobMessages()}>{(jobMessage) => <JobBubble jobMessage={jobMessage} />}</For>
 
             {/* REgular messages */}
-            <Show when={messages().length === 1 && selectedChatFlow() == '9d890834-eb87-4909-930f-d420fa53a52a'}>
+            <Show when={messages().length === 1}>
               <For each={[...messages()]}>
                 {(message, index) => {
                   return (
@@ -943,7 +943,7 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
               </For>
             </Show>
 
-            <Show when={messages().length === 1 && selectedChatFlow() == '9d890834-eb87-4909-930f-d420fa53a52a'}>
+            <Show when={messages().length === 1}>
               <Show when={starterPrompts().length > 0}>
                 <div class="w-full flex flex-row flex-wrap px-5 py-[10px] gap-2">
                   <For each={[...starterPrompts()]}>{(key) => <StarterPromptBubble prompt={key} onPromptClick={() => promptClick(key)} />}</For>

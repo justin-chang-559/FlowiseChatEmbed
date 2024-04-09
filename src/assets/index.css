@@ -469,6 +469,7 @@ input {
 }
 
 .job-message {
+  margin: 10px, 0, 10px, 0;
   font-size: 16px;
   margin-bottom: 10px;
 }
@@ -478,6 +479,8 @@ input {
   border: 1px solid #eaeaea;
   border-radius: 5px;
   padding: 10px;
+  margin-top: 10px;
+  margin-bottom: 10px;
   transition: transform 0.3s ease;
 }
 
@@ -501,6 +504,8 @@ input {
 .choice-buttons-row,
 .loading-jobs-message-container {
   justify-content: space-between;
+  flex: auto;
+  gap: 10px;
 }
 
 .ai-setting {
