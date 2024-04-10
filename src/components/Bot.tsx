@@ -289,32 +289,28 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
             <p>{props.jobMessage.message}</p>
           </div>
         </div>
-        
-          
-       
+
         <Show when={props.jobMessage.jobs.length > 0}>
-         
           <div class="job-bubble">
             <div class="job-listings">
               <For each={props.jobMessage.jobs}>
                 {(job) => (
-                  <a href="https://www.linkedin.com/jobs/">
-                  <div class="job-card-wrapper">
-                    <div class="job-card">
-                      <h2>{job.title}</h2>
-                      <p>Company: {job.company}</p>
-                      <p>Wage: {job.wage}</p>
-                      {/* Add job_type, details, and explanation if you want to display them */}
+                  <a href="https://www.linkedin.com/jobs/" target="_blank" rel="noopener noreferrer">
+                    <div class="job-card-wrapper">
+                      <div class="job-card">
+                        <h2>{job.title}</h2>
+                        <p>Company: {job.company}</p>
+                        <p>Wage: {job.wage}</p>
+                        {/* Add job_type, details, and explanation if you want to display them */}
+                      </div>
                     </div>
-                  </div>
                   </a>
                 )}
               </For>
             </div>
           </div>
-          
-          </Show>
         </Show>
+      </Show>
     );
   };
 
@@ -865,19 +861,18 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
                     {(job) => {
                       // Type enforcement and index access
                       return (
-                        <a href="https://www.indeed.com/">
+                        <a href="https://www.indeed.com/" target="_blank" rel="noopener noreferrer">
                           <div class="job-card-wrapper">
-                          {' '}
-                          {/* Using 'name' as a placeholder key */}
-                          <div class="job-card">
-                            <h2>{job.title}</h2>
-                            <p>Company: {job.company}</p>
-                            <p>Wage: {job.wage}</p>
-                            {/* Add job_type, details, and explanation if you want to display them */}
+                            {' '}
+                            {/* Using 'name' as a placeholder key */}
+                            <div class="job-card">
+                              <h2>{job.title}</h2>
+                              <p>Company: {job.company}</p>
+                              <p>Wage: {job.wage}</p>
+                              {/* Add job_type, details, and explanation if you want to display them */}
+                            </div>
                           </div>
-                        </div>
                         </a>
-                        
                       );
                     }}
                   </For>

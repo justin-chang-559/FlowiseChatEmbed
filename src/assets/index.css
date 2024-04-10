@@ -461,7 +461,7 @@ input {
 .job-bubble,
 .choice-buttons-row,
 .loading-jobs-message-container {
-  background-color: #0056b3; /* Unified color theme */
+  background-color: #19b99a; /* Unified color theme */
   color: white;
   padding: 10px;
   border-radius: 8px;
@@ -490,7 +490,7 @@ input {
 
 .job-card h2 {
   font-size: 18px;
-  color: #0056b3;
+  color: black;
   margin: 0 0 10px 0;
 }
 
@@ -508,7 +508,7 @@ input {
 }
 
 .ai-setting {
-  background-color: #323d7b; /* Unique background color for ai-setting buttons */
+  background-color: white; /* Unique background color for ai-setting buttons */
   color: white;
   padding: 8px 16px;
   border-radius: 20px;
