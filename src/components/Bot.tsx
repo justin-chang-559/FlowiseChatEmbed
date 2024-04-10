@@ -93,6 +93,7 @@ interface JobListing {
   wage: string;
   hours: string; // Consider adding this if relevant
   additional_info: string;
+  link: string;
 }
 
 interface ApiResponse {
@@ -288,12 +289,16 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
             <p>{props.jobMessage.message}</p>
           </div>
         </div>
-
+        
+          
+       
         <Show when={props.jobMessage.jobs.length > 0}>
+         
           <div class="job-bubble">
             <div class="job-listings">
               <For each={props.jobMessage.jobs}>
                 {(job) => (
+                  <a href="https://www.linkedin.com/jobs/">
                   <div class="job-card-wrapper">
                     <div class="job-card">
                       <h2>{job.title}</h2>
@@ -302,12 +307,14 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
                       {/* Add job_type, details, and explanation if you want to display them */}
                     </div>
                   </div>
+                  </a>
                 )}
               </For>
             </div>
           </div>
+          
+          </Show>
         </Show>
-      </Show>
     );
   };
 
@@ -850,7 +857,6 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
               </div>
             </Show>
 
-
             {/* ApiData Contaner  */}
             <Show when={selectedChatFlow() == 'a32245d2-2b55-4580-bd33-b4e046a07c84'}>
               <div class="api-data-container">
@@ -859,7 +865,8 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
                     {(job) => {
                       // Type enforcement and index access
                       return (
-                        <div class="job-card-wrapper">
+                        <a href="https://www.indeed.com/">
+                          <div class="job-card-wrapper">
                           {' '}
                           {/* Using 'name' as a placeholder key */}
                           <div class="job-card">
@@ -869,6 +876,8 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
                             {/* Add job_type, details, and explanation if you want to display them */}
                           </div>
                         </div>
+                        </a>
+                        
                       );
                     }}
                   </For>
@@ -951,7 +960,6 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
             <Show when={isLoadingJobs() && selectedChatFlow() == 'a32245d2-2b55-4580-bd33-b4e046a07c84'}>
               <div class="loading-jobs-message-container">Loading Opportunities...</div>
             </Show>
-
           </div>
 
           <Show when={previews().length > 0}>

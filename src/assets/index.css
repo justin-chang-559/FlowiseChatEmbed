@@ -508,7 +508,7 @@ input {
 }
 
 .ai-setting {
-  background-color: #0c1a34; /* Unique background color for ai-setting buttons */
+  background-color: #323d7b; /* Unique background color for ai-setting buttons */
   color: white;
   padding: 8px 16px;
   border-radius: 20px;
@@ -518,7 +518,7 @@ input {
 }
 
 .ai-setting:hover {
-  background-color: #004494; /* Darker shade on hover */
+  background-color: rgb(6, 170, 159); /* Darker shade on hover */
   transform: scale(1.05); /* Slight scaling effect on hover */
 }
 

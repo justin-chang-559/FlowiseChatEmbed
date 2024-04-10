@@ -60,6 +60,7 @@ interface JobListing {
     wage: string;
     hours: string;
     additional_info: string;
+    link: string;
 }
 export declare const Bot: (botProps: BotProps & {
     class?: string;
