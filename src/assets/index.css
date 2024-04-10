@@ -438,6 +438,7 @@ input {
 }
 
 /* Example - adjust as needed */
+/* Utility classes for layout */
 .flex-row {
   display: flex;
   flex-direction: row;
@@ -460,7 +461,7 @@ input {
 .job-bubble,
 .choice-buttons-row,
 .loading-jobs-message-container {
-  background-color: #0056b3; /* Unified color theme for significant components */
+  background-color: #0056b3; /* Unified color theme */
   color: white;
   padding: 10px;
   border-radius: 8px;
@@ -469,7 +470,6 @@ input {
 }
 
 .job-message {
-  margin: 10px, 0, 10px, 0;
   font-size: 16px;
   margin-bottom: 10px;
 }
@@ -485,13 +485,13 @@ input {
 }
 
 .job-card-wrapper:hover {
-  transform: translateY(-3px); /* Slight lift effect on hover */
+  transform: translateY(-3px);
 }
 
 .job-card h2 {
   font-size: 18px;
   color: #0056b3;
-  margin: 0 0 10px 0; /* Adjusted margin for spacing */
+  margin: 0 0 10px 0;
 }
 
 .job-card p {
@@ -500,21 +500,26 @@ input {
   margin: 5px 0;
 }
 
-/* Adjustments for the choice buttons and loading container */
-.choice-buttons-row,
-.loading-jobs-message-container {
-  justify-content: space-between;
+/* Choice buttons and loading container adjustments */
+.choice-buttons-row {
+  display: flex;
+  justify-content: space-between; /* Ensures buttons are as far apart as possible */
   gap: 10px;
 }
 
 .ai-setting {
+  background-color: #0c1a34; /* Unique background color for ai-setting buttons */
+  color: white;
+  padding: 8px 16px;
+  border-radius: 20px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
-  flex: auto;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  width: 100%;
 }
 
 .ai-setting:hover {
-  background-color: #004494; /* Darker shade on hover for interaction feedback */
+  background-color: #004494; /* Darker shade on hover */
+  transform: scale(1.05); /* Slight scaling effect on hover */
 }
 
 /* Responsive adjustments */

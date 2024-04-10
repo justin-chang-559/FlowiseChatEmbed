@@ -850,10 +850,6 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
               </div>
             </Show>
 
-            {/* Loading sign */}
-            <Show when={isLoadingJobs() && selectedChatFlow() == 'a32245d2-2b55-4580-bd33-b4e046a07c84'}>
-              <div class="loading-jobs-message-container">Loading Opportunities...</div>
-            </Show>
 
             {/* ApiData Contaner  */}
             <Show when={selectedChatFlow() == 'a32245d2-2b55-4580-bd33-b4e046a07c84'}>
@@ -950,6 +946,12 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
                 </div>
               </Show>
             </Show>
+
+            {/* Loading sign */}
+            <Show when={isLoadingJobs() && selectedChatFlow() == 'a32245d2-2b55-4580-bd33-b4e046a07c84'}>
+              <div class="loading-jobs-message-container">Loading Opportunities...</div>
+            </Show>
+
           </div>
 
           <Show when={previews().length > 0}>
