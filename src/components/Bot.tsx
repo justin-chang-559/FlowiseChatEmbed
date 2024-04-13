@@ -153,6 +153,7 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
   const [selectedChatFlow, setSelectedChatFlow] = createSignal('9d890834-eb87-4909-930f-d420fa53a52a'); // 'regular' being the default
   const [isLoadingJobs, setIsLoadingJobs] = createSignal(false); //is loading hook
   const [userCareer, setUserCareer] = createSignal(''); //user career hook
+  console.log('User ID:', botProps.userID);
 
   createEffect(async () => {
     const auth = getAuth();
