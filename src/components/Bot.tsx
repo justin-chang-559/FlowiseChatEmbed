@@ -21,6 +21,31 @@ import { useState, useEffect } from 'react';
 import { create, set } from 'lodash';
 import { text } from 'stream/consumers';
 import { clear, count } from 'console';
+import {signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
+import {doc, getDoc } from 'firebase/firestore';
+import { initializeApp } from "firebase/app";
+import { getAuth, setPersistence, browserLocalPersistence } from "firebase/auth";
+import { getFirestore } from "firebase/firestore";
+import { getStorage } from "firebase/storage"; // Import getStorage
+
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyDx9f_iIwwM5wouSTT3QntFlwHcbNEqirA",
+  authDomain: "conectado-33186.firebaseapp.com",
+  projectId: "conectado-33186",
+  storageBucket: "conectado-33186.appspot.com",
+  messagingSenderId: "239868035366",
+  appId: "1:239868035366:web:62488feeeb1231890481e7",
+  measurementId: "G-902KJ2QKXM"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app); // Initialize Firestore
+const storage = getStorage(app); // Initialize Firebase Storage
+const auth = getAuth(app);
+setPersistence(auth, browserLocalPersistence);
 export type FileEvent<T = EventTarget> = {
   target: T;
 };
@@ -108,6 +133,7 @@ const defaultWelcomeMessage = 'Need career assistance? Ask me anything!';
 const defaultBackgroundColor = '#0F2D52';
 const defaultTextColor = '#303235';
 
+
 async function query(data: { question: string }): Promise<ApiResponse> {
   const response = await fetch('http://localhost:3000/api/v1/prediction/a32245d2-2b55-4580-bd33-b4e046a07c84', {
     method: 'POST',
@@ -118,7 +144,7 @@ async function query(data: { question: string }): Promise<ApiResponse> {
   });
   // const result: ApiResponse = (await response.json()) as ApiResponse; // Enforce ApiResponse type
   const result = await response.json();
-  console.log('Stuff', result);
+  console.log('Jobs', result);
   return result;
 }
 
@@ -126,25 +152,47 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
   const [apiData, setApiData] = createSignal<ApiResponse | null>(null); //apicall hook
   const [selectedChatFlow, setSelectedChatFlow] = createSignal('9d890834-eb87-4909-930f-d420fa53a52a'); // 'regular' being the default
   const [isLoadingJobs, setIsLoadingJobs] = createSignal(false); //is loading hook
+  const [userCareer, setUserCareer] = createSignal(''); //user career hook
 
   createEffect(async () => {
-    setIsLoadingJobs(true);
-    try {
-      const data = await query({ question: 'graphic designer' });
-      const parsedJobs = JSON.parse(data.text) as JobListing[]; // Parse the JSON
-      // const stripped = String(data.text).replace(/^["']+|["']+$/g, ''); // Strip the brackets
-      // console.log('data.text', stripped);
-      setApiData({ ...data, jobs: parsedJobs });
-      console.log('parsedjobs', parsedJobs);
-      console.log('apidata.jobs', apiData()?.jobs);
-      // console.log('apiData', apiData());
-    } catch (error) {
-      console.error('Error fetching data:', error);
-      // Handle errors appropriately, e.g., display an error message
-    } finally {
-      setIsLoadingJobs(false);
+    const auth = getAuth();
+    const user = auth.currentUser;
+    if (user) {
+      try {
+        const userDocRef = doc(db, 'Users', user.uid);
+        const userDoc = await getDoc(userDocRef);
+        if (userDoc.exists() && userDoc.data().career) {
+          console.log("Career found:", userDoc.data().cateerField);
+          setUserCareer(userDoc.data().career);
+        } else {
+          console.log("No such document or career not set!");
+        }
+      } catch (error) {
+        console.error("Error getting document:", error);
+      }
+    } else {
+      console.log("User not logged in!");
+    }
+    });
+  
+  createEffect(async () => {
+    if (userCareer()) {
+      setIsLoadingJobs(true);
+      try {
+        const data = await query({ question: userCareer() });
+        const parsedJobs = JSON.parse(data.text) as JobListing[];
+        setApiData({ ...data, jobs: parsedJobs });
+        console.log('Parsed jobs:', parsedJobs);
+        console.log('API data:', apiData());
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      } finally {
+        setIsLoadingJobs(false);
+      }
     }
   });
+
+
 
   const props = mergeProps({ showTitle: true }, botProps);
   let chatContainer: HTMLDivElement | undefined;

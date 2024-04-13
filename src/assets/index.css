@@ -217,6 +217,7 @@ textarea {
   /* Changed color here */
 
 .chatbot-guest-bubble {
+  margin-right: 8px;
   color: var(--chatbot-guest-bubble-color);
   background-color: #25C8FA;
   border-radius: 6px;
