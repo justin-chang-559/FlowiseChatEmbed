@@ -53,6 +53,7 @@ export type BotProps = {
     fontSize?: number;
     isFullPage?: boolean;
     observersConfig?: observersConfigType;
+    userID?: string;
 };
 interface JobListing {
     title: string;

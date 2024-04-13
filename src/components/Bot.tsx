@@ -110,6 +110,7 @@ export type BotProps = {
   fontSize?: number;
   isFullPage?: boolean;
   observersConfig?: observersConfigType;
+  userID?: string;
 };
 
 interface JobListing {
@@ -162,6 +163,7 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
         const userDoc = await getDoc(userDocRef);
         if (userDoc.exists() && userDoc.data().career) {
           console.log('Career found:', userDoc.data().cateerField);
+          console.log('User:', userDoc.data());
           setUserCareer(userDoc.data().careerField);
         } else {
           console.log('No such document or career not set!');
