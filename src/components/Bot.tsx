@@ -162,7 +162,7 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
         const userDoc = await getDoc(userDocRef);
         if (userDoc.exists() && userDoc.data().career) {
           console.log('Career found:', userDoc.data().cateerField);
-          setUserCareer(userDoc.data().career);
+          setUserCareer(userDoc.data().careerField);
         } else {
           console.log('No such document or career not set!');
         }
