@@ -160,10 +160,10 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
     const user = auth.currentUser;
     if (user) {
       try {
-        const userDocRef = doc(db, 'Users', user.uid);
+        const userDocRef = doc(db, 'Users', botProps.userID ?? user.uid);
         const userDoc = await getDoc(userDocRef);
-        if (userDoc.exists() && userDoc.data().career) {
-          console.log('Career found:', userDoc.data().cateerField);
+        if (userDoc.exists() && userDoc.data().careerField) {
+          console.log('Career found:', userDoc.data().careerField);
           console.log('User:', userDoc.data());
           setUserCareer(userDoc.data().careerField);
         } else {
