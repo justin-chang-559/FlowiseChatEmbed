@@ -114,19 +114,19 @@ export type BotProps = {
 };
 
 interface JobListing {
-  Name: string
-        Deadline: string 
-        Wage: string
-        Benefits: string
-        Job_Field: string
-        Job_Type: string
-        Schedule: string
-        Location: string
-        Details: string 
-        Ed_Level: string 
-        URL: string 
-        Company: string 
-        Opp_Type: string 
+  Name: string;
+  Deadline: string;
+  Wage: string;
+  Benefits: string;
+  Job_Field: string;
+  Job_Type: string;
+  Schedule: string;
+  Location: string;
+  Details: string;
+  Ed_Level: string;
+  URL: string;
+  Company: string;
+  Opp_Type: string;
 }
 
 interface ApiResponse {
@@ -188,7 +188,8 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
     if (userCareer()) {
       setIsLoadingJobs(true);
       try {
-        const data = await query({ question: userCareer() });
+
+        const data = await query({ question: `Return 3 jobs in JSON related to ${userCareer()} with no white space` });
         const parsedJobs = JSON.parse(data.text) as JobListing[];
         setApiData({ ...data, jobs: parsedJobs });
         console.log('Parsed jobs:', parsedJobs);
