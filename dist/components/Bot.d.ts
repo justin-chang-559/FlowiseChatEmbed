@@ -56,12 +56,19 @@ export type BotProps = {
     userID?: string;
 };
 interface JobListing {
-    title: string;
-    company: string;
-    wage: string;
-    hours: string;
-    additional_info: string;
-    link: string;
+    Name: string;
+    Deadline: string;
+    Wage: string;
+    Benefits: string;
+    Job_Field: string;
+    Job_Type: string;
+    Schedule: string;
+    Location: string;
+    Details: string;
+    Ed_Level: string;
+    URL: string;
+    Company: string;
+    Opp_Type: string;
 }
 export declare const Bot: (botProps: BotProps & {
     class?: string;

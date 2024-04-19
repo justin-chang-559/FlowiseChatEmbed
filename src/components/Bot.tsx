@@ -114,12 +114,19 @@ export type BotProps = {
 };
 
 interface JobListing {
-  title: string;
-  company: string;
-  wage: string;
-  hours: string; // Consider adding this if relevant
-  additional_info: string;
-  link: string;
+  Name: string
+        Deadline: string 
+        Wage: string
+        Benefits: string
+        Job_Field: string
+        Job_Type: string
+        Schedule: string
+        Location: string
+        Details: string 
+        Ed_Level: string 
+        URL: string 
+        Company: string 
+        Opp_Type: string 
 }
 
 interface ApiResponse {
@@ -343,12 +350,12 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
             <div class="job-listings">
               <For each={props.jobMessage.jobs}>
                 {(job) => (
-                  <a href="https://www.linkedin.com/jobs/" target="_blank" rel="noopener noreferrer">
+                  <a href={job.URL} target="_blank" rel="noopener noreferrer">
                     <div class="job-card-wrapper">
                       <div class="job-card">
-                        <h2>{job.title}</h2>
-                        <p>Company: {job.company}</p>
-                        <p>Wage: {job.wage}</p>
+                        <h2>{job.Job_Field}</h2>
+                        <p>Company: {job.Company}</p>
+                        <p>Wage: {job.Wage}</p>
                         {/* Add job_type, details, and explanation if you want to display them */}
                       </div>
                     </div>
@@ -369,7 +376,7 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
     setIsLoadingJobs(true); // Start loading indicator
     try {
       // Fetch job listings based on the query
-      const data = await query({ question: queryText });
+      const data = await query({ question: `Return 3 jobs in JSON related to ${queryText}` });
       const parsedJobs = JSON.parse(data.text) as JobListing[]; // Parse the JSON response
       console.log('parsedjobs before', parsedJobs);
       const message = parsedJobs.length > 0 ? `Here are the job listings related to: ${queryText}` : 'No job listings found.';
@@ -909,14 +916,14 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
                     {(job) => {
                       // Type enforcement and index access
                       return (
-                        <a href="https://www.indeed.com/" target="_blank" rel="noopener noreferrer">
+                        <a href={job.URL} target="_blank" rel="noopener noreferrer">
                           <div class="job-card-wrapper">
                             {' '}
                             {/* Using 'name' as a placeholder key */}
                             <div class="job-card">
-                              <h2>{job.title}</h2>
-                              <p>Company: {job.company}</p>
-                              <p>Wage: {job.wage}</p>
+                              <h2>{job.Job_Field}</h2>
+                              <p>Company: {job.Company}</p>
+                              <p>Wage: {job.Wage}</p>
                               {/* Add job_type, details, and explanation if you want to display them */}
                             </div>
                           </div>
