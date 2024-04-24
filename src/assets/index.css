@@ -4,7 +4,7 @@
 
 :host {
   --chatbot-container-bg-image: none;
-  --chatbot-container-bg-color: transparent;
+  --chatbot-container-bg-color: linear-gradient(to right, #0F1B36, #faffd1);
   --chatbot-container-font-family: 'Open Sans';
   /* Changed color here */
   --chatbot-button-bg-color: #19b99a;  
@@ -513,10 +513,12 @@ input {
   background-color: white; /* Unique background color for ai-setting buttons */
   color: black;
   padding: 8px 16px;
-  border-radius: 20px;
   cursor: pointer;
   transition: background-color 0.3s ease, transform 0.3s ease;
   width: 100%;
+  border-radius: 8px;
+  box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease 0s;
 }
 
 .ai-setting:hover {
