@@ -831,6 +831,7 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
         ref={botContainer}
         class={'relative flex w-full h-full text-base overflow-hidden bg-cover bg-center flex-col items-center chatbot-container ' + props.class}
         onDragEnter={handleDrag}
+        border-radius={props.isFullPage ? '0px' : '8px'}
       >
         {isDragActive() && (
           <div
@@ -867,8 +868,8 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
             style={{
               background: props.bubbleBackgroundColor,
               color: props.bubbleTextColor,
-              'border-top-left-radius': props.isFullPage ? '0px' : '6px',
-              'border-top-right-radius': props.isFullPage ? '0px' : '6px',
+              'border-top-left-radius': props.isFullPage ? '0px' : '8px',
+              'border-top-right-radius': props.isFullPage ? '0px' : '8px',
             }}
           >
             <Show when={props.titleAvatarSrc}>
@@ -896,6 +897,7 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
           <div
             ref={chatContainer}
             class="overflow-y-scroll flex flex-col flex-grow min-w-full w-full px-3 pt-[70px] relative scrollable-container chatbot-chat-view scroll-smooth"
+            style={{background:`linear-gradient(to bottom, #0F1B36, #19B99E)`}}
           >
             <Show when={messages.length >= 0}>
               <div class="choice-buttons-row">
