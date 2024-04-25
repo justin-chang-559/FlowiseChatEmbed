@@ -340,7 +340,7 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
     return (
       <Show when={selectedChatFlow() == 'a32245d2-2b55-4580-bd33-b4e046a07c84'}>
         <div class="api-data-container">
-          <div class="job-message">
+          <div class="job-bubble">
             <p>{props.jobMessage.message}</p>
           </div>
         </div>
@@ -831,7 +831,7 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
         ref={botContainer}
         class={'relative flex w-full h-full text-base overflow-hidden bg-cover bg-center flex-col items-center chatbot-container ' + props.class}
         onDragEnter={handleDrag}
-        style={{'border-radius':'8px'}}
+        style={{ 'border-radius': '8px' }}
       >
         {isDragActive() && (
           <div
