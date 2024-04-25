@@ -507,6 +507,7 @@ input {
   display: flex;
   justify-content: space-between; /* Ensures buttons are as far apart as possible */
   gap: 10px;
+  background-color: #0F1B36;
 }
 
 .ai-setting {

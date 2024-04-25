@@ -339,7 +339,7 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
   const JobBubble = (props: { jobMessage: JobMessage }) => {
     return (
       <Show when={selectedChatFlow() == 'a32245d2-2b55-4580-bd33-b4e046a07c84'}>
-        <div class="job-bubble">
+        <div class="api-data-container">
           <div class="job-message">
             <p>{props.jobMessage.message}</p>
           </div>
@@ -831,7 +831,7 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
         ref={botContainer}
         class={'relative flex w-full h-full text-base overflow-hidden bg-cover bg-center flex-col items-center chatbot-container ' + props.class}
         onDragEnter={handleDrag}
-        border-radius={props.isFullPage ? '0px' : '8px'}
+        style={{'border-radius':'8px'}}
       >
         {isDragActive() && (
           <div
@@ -897,7 +897,7 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
           <div
             ref={chatContainer}
             class="overflow-y-scroll flex flex-col flex-grow min-w-full w-full px-3 pt-[70px] relative scrollable-container chatbot-chat-view scroll-smooth"
-            style={{background:`linear-gradient(to bottom, #0F1B36, #19B99E)`}}
+            style={{ background: `linear-gradient(to bottom, #0F1B36, #19B99E)` }}
           >
             <Show when={messages.length >= 0}>
               <div class="choice-buttons-row">
