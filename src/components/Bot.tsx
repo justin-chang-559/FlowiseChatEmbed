@@ -188,7 +188,7 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
     if (userCareer()) {
       setIsLoadingJobs(true);
       try {
-        const data = await query({ question: `Return 3 jobs in JSON related to ${userCareer()} with no white space` });
+        const data = await query({ question: `${userCareer()}` });
         const parsedJobs = JSON.parse(data.text.slice(7, data.text.length - 3)) as JobListing[];
         setApiData({ ...data, jobs: parsedJobs });
         console.log('Parsed jobs:', parsedJobs);
@@ -354,22 +354,30 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
                     <div class="job-card-wrapper">
                       <div class="job-card">
                         <h2>{job.Job_Field}</h2>
-                        <p style={{
-                          'color': '#19b99a',
-                          'font-size': '1rem',
-                          'line-height': '1.5rem',
-                          'text-transform': 'uppercase',
-                          'letter-spacing': '2.5px',
-                          'font-weight': '500',
-                          'border-bottom': '2px solid #000'
-                        }}>Company: {job.Company}</p>
-                        <p style={{
-                          'margin-top': '0.25rem',
-                         'margin-bottom': 'auto',
-                          'color': '#595b5f',
-                          'font-size': '0.875rem',
-                          'line-height': '1.25rem'
-                        }}>Wage: {job.Wage}</p>
+                        <p
+                          style={{
+                            color: '#19b99a',
+                            'font-size': '1rem',
+                            'line-height': '1.5rem',
+                            'text-transform': 'uppercase',
+                            'letter-spacing': '2.5px',
+                            'font-weight': '500',
+                            'border-bottom': '2px solid #000',
+                          }}
+                        >
+                          Company: {job.Company}
+                        </p>
+                        <p
+                          style={{
+                            'margin-top': '0.25rem',
+                            'margin-bottom': 'auto',
+                            color: '#595b5f',
+                            'font-size': '0.875rem',
+                            'line-height': '1.25rem',
+                          }}
+                        >
+                          Wage: {job.Wage}
+                        </p>
                         {/* Add job_type, details, and explanation if you want to display them */}
                       </div>
                     </div>
@@ -390,7 +398,7 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
     setIsLoadingJobs(true); // Start loading indicator
     try {
       // Fetch job listings based on the query
-      const data = await query({ question: `Return 3 jobs in JSON related to ${queryText}` });
+      const data = await query({ question: `${queryText}` });
       const parsedJobs = JSON.parse(data.text.slice(7, data.text.length - 3)) as JobListing[]; // Parse the JSON response
       console.log('parsedjobs before', parsedJobs);
       const message = parsedJobs.length > 0 ? `Here are the job listings related to: ${queryText}` : 'No job listings found.';
@@ -938,22 +946,30 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
                             {/* Using 'name' as a placeholder key */}
                             <div class="job-card">
                               <h2>{job.Job_Field}</h2>
-                              <p style={{
-                          'color': '#19b99a',
-                          'font-size': '1rem',
-                          'line-height': '1.5rem',
-                          'text-transform': 'uppercase',
-                          'letter-spacing': '2.5px',
-                          'font-weight': '500',
-                          'border-bottom': '2px solid #000'
-                        }}>Company: {job.Company}</p>
-                              <p style={{
-                          'margin-top': '0.25rem',
-                         'margin-bottom': 'auto',
-                          'color': '#595b5f',
-                          'font-size': '0.875rem',
-                          'line-height': '1.25rem'
-                        }}>Wage: {job.Wage}</p>
+                              <p
+                                style={{
+                                  color: '#19b99a',
+                                  'font-size': '1rem',
+                                  'line-height': '1.5rem',
+                                  'text-transform': 'uppercase',
+                                  'letter-spacing': '2.5px',
+                                  'font-weight': '500',
+                                  'border-bottom': '2px solid #000',
+                                }}
+                              >
+                                Company: {job.Company}
+                              </p>
+                              <p
+                                style={{
+                                  'margin-top': '0.25rem',
+                                  'margin-bottom': 'auto',
+                                  color: '#595b5f',
+                                  'font-size': '0.875rem',
+                                  'line-height': '1.25rem',
+                                }}
+                              >
+                                Wage: {job.Wage}
+                              </p>
                               {/* Add job_type, details, and explanation if you want to display them */}
                             </div>
                           </div>
