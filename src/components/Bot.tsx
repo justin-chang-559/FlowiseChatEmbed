@@ -189,7 +189,7 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
       setIsLoadingJobs(true);
       try {
         const data = await query({ question: `${userCareer()}` });
-        const parsedJobs = JSON.parse(data.text.slice(7, data.text.length - 3)) as JobListing[];
+        const parsedJobs = JSON.parse(data.text) as JobListing[];
         setApiData({ ...data, jobs: parsedJobs });
         console.log('Parsed jobs:', parsedJobs);
         console.log('API data:', apiData());
@@ -399,7 +399,7 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
     try {
       // Fetch job listings based on the query
       const data = await query({ question: `${queryText}` });
-      const parsedJobs = JSON.parse(data.text.slice(7, data.text.length - 3)) as JobListing[]; // Parse the JSON response
+      const parsedJobs = JSON.parse(data.text) as JobListing[]; // Parse the JSON response
       console.log('parsedjobs before', parsedJobs);
       const message = parsedJobs.length > 0 ? `Here are the job listings related to: ${queryText}` : 'No job listings found.';
       // Create a JobMessage
