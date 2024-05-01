@@ -353,9 +353,7 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
                   <a href={job.URL} target="_blank" rel="noopener noreferrer">
                     <div class="job-card-wrapper">
                       <div class="job-card">
-                        <h2>{job.Job_Field}</h2>
-                        <p
-                          style={{
+                        <h2 style={{
                             color: '#19b99a',
                             'font-size': '1rem',
                             'line-height': '1.5rem',
@@ -363,9 +361,17 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
                             'letter-spacing': '2.5px',
                             'font-weight': '500',
                             'border-bottom': '2px solid #000',
+                          }}>{job.Name}</h2>
+                        <p
+                          style={{
+                            'margin-top': '0.25rem',
+                            'margin-bottom': 'auto',
+                            color: '#595b5f',
+                            'font-size': '0.875rem',
+                            'line-height': '1.25rem',
                           }}
                         >
-                          Company: {job.Company}
+                          <b>Company:</b> {job.Company}
                         </p>
                         <p
                           style={{
@@ -376,7 +382,7 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
                             'line-height': '1.25rem',
                           }}
                         >
-                          Wage: {job.Wage}
+                          <b>Wage:</b> {job.Wage}
                         </p>
                         {/* Add job_type, details, and explanation if you want to display them */}
                       </div>
@@ -945,9 +951,7 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
                             {' '}
                             {/* Using 'name' as a placeholder key */}
                             <div class="job-card">
-                              <h2>{job.Job_Field}</h2>
-                              <p
-                                style={{
+                              <h2 style={{
                                   color: '#19b99a',
                                   'font-size': '1rem',
                                   'line-height': '1.5rem',
@@ -955,9 +959,17 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
                                   'letter-spacing': '2.5px',
                                   'font-weight': '500',
                                   'border-bottom': '2px solid #000',
+                                }}>{job.Name}</h2>
+                              <p
+                                style={{
+                                  'margin-top': '0.25rem',
+                                  'margin-bottom': 'auto',
+                                  color: '#595b5f',
+                                  'font-size': '0.875rem',
+                                  'line-height': '1.25rem',
                                 }}
                               >
-                                Company: {job.Company}
+                                <b>Company:</b> {job.Company}
                               </p>
                               <p
                                 style={{
@@ -968,7 +980,7 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
                                   'line-height': '1.25rem',
                                 }}
                               >
-                                Wage: {job.Wage}
+                                <b>Wage:</b> {job.Wage}
                               </p>
                               {/* Add job_type, details, and explanation if you want to display them */}
                             </div>
