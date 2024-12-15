@@ -929,17 +929,17 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
           >
             <Show when={messages.length >= 0}>
               <div class="choice-buttons-row">
-                <button onClick={() => setSelectedChatFlow('9d890834-eb87-4909-930f-d420fa53a52a')} class="ai-setting">
+                <button onClick={() => setSelectedChatFlow('3b613b03-3bed-4015-8a73-7ba5249eb828')} class="ai-setting">
                   Regular Chat
                 </button>
-                <button onClick={() => setSelectedChatFlow('a32245d2-2b55-4580-bd33-b4e046a07c84')} class="ai-setting">
+                <button onClick={() => setSelectedChatFlow('5a52c765-6a54-4534-a134-8f7ddbb5e232')} class="ai-setting">
                   Job Search
                 </button>
               </div>
             </Show>
 
             {/* ApiData Contaner  */}
-            <Show when={selectedChatFlow() == 'a32245d2-2b55-4580-bd33-b4e046a07c84'}>
+            <Show when={selectedChatFlow() == '5a52c765-6a54-4534-a134-8f7ddbb5e232'}>
               <div class="api-data-container">
                 <div class="card-container">
                   <For each={apiData()?.jobs}>
@@ -997,7 +997,7 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
             <For each={jobMessages()}>{(jobMessage) => <JobBubble jobMessage={jobMessage} />}</For>
 
             {/* REgular messages */}
-            <Show when={selectedChatFlow() == '9d890834-eb87-4909-930f-d420fa53a52a'}>
+            <Show when={selectedChatFlow() == '3b613b03-3bed-4015-8a73-7ba5249eb828'}>
               <For each={[...messages()]}>
                 {(message, index) => {
                   return (
