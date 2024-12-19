@@ -142,7 +142,7 @@ const defaultBackgroundColor = '#0F2D52';
 const defaultTextColor = '#303235';
 
 async function query(data: { question: string }): Promise<ApiResponse> {
-  const response = await fetch('http://localhost:3000/api/v1/prediction/a32245d2-2b55-4580-bd33-b4e046a07c84', {
+  const response = await fetch('http://localhost:3000/api/v1/prediction/5a52c765-6a54-4534-a134-8f7ddbb5e232', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -157,7 +157,7 @@ async function query(data: { question: string }): Promise<ApiResponse> {
 
 export const Bot = (botProps: BotProps & { class?: string }) => {
   const [apiData, setApiData] = createSignal<ApiResponse | null>(null); //apicall hook
-  const [selectedChatFlow, setSelectedChatFlow] = createSignal('9d890834-eb87-4909-930f-d420fa53a52a'); // 'regular' being the default
+  const [selectedChatFlow, setSelectedChatFlow] = createSignal('3b613b03-3bed-4015-8a73-7ba5249eb828'); // 'regular' being the default
   const [isLoadingJobs, setIsLoadingJobs] = createSignal(false); //is loading hook
   const [userCareer, setUserCareer] = createSignal(''); //user career hook
   console.log('User ID:', botProps.userID);
