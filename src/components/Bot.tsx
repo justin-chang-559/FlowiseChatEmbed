@@ -353,7 +353,8 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
                   <a href={job.URL} target="_blank" rel="noopener noreferrer">
                     <div class="job-card-wrapper">
                       <div class="job-card">
-                        <h2 style={{
+                        <h2
+                          style={{
                             color: '#19b99a',
                             'font-size': '1rem',
                             'line-height': '1.5rem',
@@ -361,7 +362,10 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
                             'letter-spacing': '2.5px',
                             'font-weight': '500',
                             'border-bottom': '2px solid #000',
-                          }}>{job.Name}</h2>
+                          }}
+                        >
+                          {job.Name}
+                        </h2>
                         <p
                           style={{
                             'margin-top': '0.25rem',
@@ -951,7 +955,8 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
                             {' '}
                             {/* Using 'name' as a placeholder key */}
                             <div class="job-card">
-                              <h2 style={{
+                              <h2
+                                style={{
                                   color: '#19b99a',
                                   'font-size': '1rem',
                                   'line-height': '1.5rem',
@@ -959,7 +964,10 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
                                   'letter-spacing': '2.5px',
                                   'font-weight': '500',
                                   'border-bottom': '2px solid #000',
-                                }}>{job.Name}</h2>
+                                }}
+                              >
+                                {job.Name}
+                              </h2>
                               <p
                                 style={{
                                   'margin-top': '0.25rem',
